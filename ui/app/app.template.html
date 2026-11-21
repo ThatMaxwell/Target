@@ -118,7 +118,7 @@
          box-shadow:0 1px 2px rgba(0,0,0,.06); animation:in .18s var(--expo); }
   .sug[hidden] { display:none; }
   .opt { display:flex; align-items:center; gap:12px; width:100%; height:40px; padding:0 12px; border-radius:8px; text-align:left; font-size:14px; font-weight:550;
-         --in:-1px; --len:9px; transition:background .11s var(--out); }
+         transition:background .11s var(--out); }
   .opt.sel { background:var(--soft); }
   .opt .fav { color:var(--muted); }
   .opt .lab { flex:1; min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
@@ -589,7 +589,7 @@
     sel = 0;
     sug.replaceChildren(...opts.map((o, k) => {
       const b = document.createElement("button");
-      b.type = "button"; b.className = "opt lock"; b.id = "o" + k; b.setAttribute("role", "option"); b.tabIndex = -1;
+      b.type = "button"; b.className = "opt"; b.id = "o" + k; b.setAttribute("role", "option"); b.tabIndex = -1;
       b.innerHTML = `<span class="fav"></span><span class="lab"></span><span class="meta"></span>`;
       if (o.k === "find") b.querySelector(".fav").innerHTML = ICON.find; else setIcon(b.querySelector(".fav"), o.u, o.i);
       b.querySelector(".lab").textContent = o.lab; b.querySelector(".meta").textContent = o.meta;
@@ -602,7 +602,7 @@
     paintSel();
   }
   function paintSel() {
-    [...sug.children].forEach((b, k) => { b.classList.toggle("sel", k === sel); b.classList.toggle("on", k === sel); b.setAttribute("aria-selected", k === sel); });
+    [...sug.children].forEach((b, k) => { b.classList.toggle("sel", k === sel); b.setAttribute("aria-selected", k === sel); });
     if (opts.length) q.setAttribute("aria-activedescendant", "o" + sel); else q.removeAttribute("aria-activedescendant");
   }
   function hideSug() { sug.hidden = true; q.setAttribute("aria-expanded", false); }

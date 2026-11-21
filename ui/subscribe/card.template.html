@@ -8,15 +8,16 @@
      https://commons.wikimedia.org/wiki/File:Sky_Clouds_and_Atmosphere.jpg -->
 <style>
   :root {
-    --page:#ebebe7; --paper:#fff; --ink:#111; --on-ink:#fff; --muted:#6b6b68; --line:#dcdcd7;
+    /* this card takes its colors from the sky photo (slate blue #647183, sampled), not the browser's black and white */
+    --page:#e3e8ef; --paper:#f3f6fa; --ink:#1b2a3e; --on-ink:#f3f6fa; --muted:#5d6c80; --line:#d2dae5;
     --font:"Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
     --out:cubic-bezier(.2,.8,.2,1); --expo:cubic-bezier(.16,1,.3,1);
     color-scheme:light;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --page:#080808; --paper:#111; --ink:#f2f2f0; --on-ink:#111; --muted:#8d8d88; --line:#272727; color-scheme:dark; }
+    :root:not([data-theme="light"]) { --page:#090e15; --paper:#101924; --ink:#e9f0f8; --on-ink:#101924; --muted:#92a1b5; --line:#213044; color-scheme:dark; }
   }
-  :root[data-theme="dark"] { --page:#080808; --paper:#111; --ink:#f2f2f0; --on-ink:#111; --muted:#8d8d88; --line:#272727; color-scheme:dark; }
+  :root[data-theme="dark"] { --page:#090e15; --paper:#101924; --ink:#e9f0f8; --on-ink:#101924; --muted:#92a1b5; --line:#213044; color-scheme:dark; }
 
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { min-height:100%; }
@@ -32,15 +33,10 @@
   .sky { position:relative; height:300px; overflow:hidden; }
   .sky img { position:absolute; inset:-6%; width:112%; height:112%; object-fit:cover; object-position:60% 40%;
              animation:drift 28s ease-in-out infinite alternate; }
-  .sky::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,0) 45%, var(--paper) 100%); }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sky::after { background:linear-gradient(180deg, rgba(17,17,17,0) 45%, var(--paper) 100%); } }
-  :root[data-theme="dark"] .sky::after { background:linear-gradient(180deg, rgba(17,17,17,0) 45%, var(--paper) 100%); }
-
-  .badge { position:absolute; z-index:1; top:18px; left:18px; display:inline-grid; place-items:center; padding:5px 8px 6px; border-radius:7px; background:#111; color:#fff; }
-  .badge svg { display:block; height:15px; width:auto; fill:currentColor; }
+  .sky::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, var(--paper) 100%); }
 
   .head { position:relative; z-index:1; margin-top:-92px; padding:0 26px; }
-  .head h1 { font-size:44px; line-height:.92; font-weight:850; letter-spacing:-.04em; }
+  .head h1 svg { display:block; height:58px; width:auto; color:var(--ink); fill:currentColor; }
   .price { display:flex; align-items:baseline; gap:6px; margin-top:12px; }
   .price b { font-size:22px; font-weight:800; letter-spacing:-.02em; }
   .price span { font-size:13.5px; font-weight:550; color:var(--muted); }
@@ -70,10 +66,9 @@
 <article class="card" aria-labelledby="plan">
   <div class="sky">
     <img src="sky.jpg" alt="">
-    <span class="badge">__BADGE__</span>
   </div>
   <div class="head">
-    <h1 id="plan">Target Plus</h1>
+    <h1 id="plan" aria-label="Target Plus">__WORD__</h1>
     <p class="price"><b>$4</b><span>a month, after a 14-day trial</span></p>
   </div>
   <div class="body">

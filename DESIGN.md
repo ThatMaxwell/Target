@@ -12,7 +12,7 @@ Background research: [docs/design-principles.md](docs/design-principles.md), [do
 
 - **Mark system:** chunky lowercase wordmark with squarish bowls (rounded rectangles, not circles); focus brackets ⌜ ⌟; a four-bar crosshair with an open center.
 - **Signature interaction:** brackets *lock on* to the thing you're about to act on (focus, hover on tiles). Never on a selected row in a list such as search suggestions: a soft background is enough there (founder's call, 2026-11-21). Scale 1.08 → 1, opacity 0 → 1, 150 ms ease-out.
-- **Color:** black and white only: ink `#111`, paper `#fff`, warm grays (`#f4f4f2`, `#ebebe7`, `#dcdcd7`). **No accent color, anywhere** (founder's call, 2026-11-21).
+- **Color:** black and white only: ink `#111`, paper `#fff`, warm grays (`#f4f4f2`, `#ebebe7`, `#dcdcd7`). **No accent color, anywhere** (founder's call, 2026-11-21). One exception: a page built around a real photo (the Target Plus card) may take its palette from that photo, sampled, never a bright accent.
 - **Type:** Archivo (OFL), heavy and slightly wide for display, tight tracking (−3% to −4%), line height 0.9–1.0. UI text at 13.5–15 px, weight 500–650.
 - **Shape:** radii 8 / 12 / 20. Pills only for the address bar, toasts and badges.
 - **Motion:** 110 press · 150 fast · 220 base · 320 slow. Ease-out for everything, **no overshoot** (the anti-slop detector flags bouncy springs); quick ease-in for things that leave. Animate transform and opacity only. Respect reduced motion.

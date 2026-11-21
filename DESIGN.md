@@ -16,6 +16,8 @@ Background research: [docs/design-principles.md](docs/design-principles.md), [do
 - **Type:** Archivo (OFL), heavy and slightly wide for display, tight tracking (−3% to −4%), line height 0.9–1.0. UI text at 13.5–15 px, weight 500–650.
 - **Shape:** radii 8 / 12 / 20. Pills only for the address bar, toasts and badges.
 - **Motion:** 110 press · 150 fast · 220 base · 320 slow. Ease-out for everything, **no overshoot** (the anti-slop detector flags bouncy springs); quick ease-in for things that leave. Animate transform and opacity only. Respect reduced motion.
+- **Tab motion (founder asked for it very smooth, 2026-11-21):** things that move in place (tabs reflowing, the active highlight) take 420 ms on quint-out `cubic-bezier(.22,1,.36,1)` via FLIP, so nothing ever jumps. A new tab drops out of the "New tab" button into its slot with the highlight riding along. A closed tab is lifted out of the flow and fades left while the rest close the gap at the same time. Switching spaces slides the old list out one side and the new list in from the other, staggered 30 ms per tab. A tab sent to another space flies there on a slight arc (in-out, 580 ms) and the space's count ticks.
+- **Logo:** at rest the sidebar shows the squircle target. Hovering it scrubs the Split take (docs/brand/motion.py) forward into the thick badge, then the spaces menu opens under it. Leaving plays it back. The take is embedded once and driven by the page, never re-drawn by hand.
 
 ## Banned (the AI-slop tells)
 - Inter, Geist, Roboto as display type. Cream + serif "tasteful default".

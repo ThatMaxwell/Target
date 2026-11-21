@@ -214,8 +214,10 @@ def take_iris(loop):
 
 
 # ---------------------------------------------------------------- take 3: split
-def take_split(loop):
-    """The white ring divides like a cell into the bowls of a, g and e; stems, tail and aperture grow in."""
+def take_split(loop, bare=False, pre=""):
+    """The white ring divides like a cell into the bowls of a, g and e; stems, tail and aperture grow in.
+    bare=True gives the version the app embeds: no intro, no margin, ids prefixed with `pre`, and anchored
+    left (the ring sits at x=0 and the badge grows rightward), so it can live in a corner and be scrubbed."""
     tl = TL(1.95, loop)
     k_fn = lambda t: ph(t, .42, 1.15, bez(.62, 0, .18, 1))
     outer = body_fn(k_fn)
@@ -261,15 +263,20 @@ def take_split(loop):
                                scale=lambda t, t0=t0: f"{n(lerp(.7, 1, sp(t, t0, up)), 4)} {n(sp(t, t0, up), 4)}",
                                opacity=lambda t, t0=t0: n(ph(t, t0 + .02, t0 + .12), 3)))
 
-    defs = (f'<clipPath id="body"><path d="{outer(0)}">{tl.a("d", outer)}</path></clipPath>'
-            f'<clipPath id="hook"><rect x="{n(xg - 4)}" y="{n(TY + 24)}" width="84" height="0">'
+    defs = (f'<clipPath id="{pre}body"><path d="{outer(0)}">{tl.a("d", outer)}</path></clipPath>'
+            f'<clipPath id="{pre}hook"><rect x="{n(xg - 4)}" y="{n(TY + 24)}" width="84" height="0">'
             f'{tl.a("height", hook_clip_h)}</rect></clipPath>')
     white = "".join(path(PAPER, bowl_fn(o, i), tl) for o, i in bowls)
     white += path(PAPER, stem, tl, evenodd=False)
-    white += f'<g clip-path="url(#hook)"><g transform="translate({n(xg)} {n(TY)})">{g_hook}</g></g>'
+    white += f'<g clip-path="url(#{pre}hook)"><g transform="translate({n(xg)} {n(TY)})">{g_hook}</g></g>'
     white += path(INK, cut, tl, evenodd=False)
     white += pops
-    mark = path(INK, outer, tl, evenodd=False) + f'<g clip-path="url(#body)">{white}</g>'
+    mark = path(INK, outer, tl, evenodd=False) + f'<g clip-path="url(#{pre}body)">{white}</g>'
+    if bare:
+        left = CX - T_OUT / 2                    # the ring's left edge inside the badge box
+        shift = lambda t: f"{n(-left * (1 - k_fn(t)), 2)} 0"
+        return (f'<svg viewBox="0 0 {n(W)} {n(H)}" aria-hidden="true"><defs>{defs}</defs>'
+                f'<g transform="translate({shift(0)})">{tl.a("transform", shift, "translate")}{mark}</g></svg>')
     return doc(tl, "split", "The ring divides into the bowls of a, g and e.", defs, intro(tl, mark))
 
 

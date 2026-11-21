@@ -9,7 +9,7 @@
     --frame:#ebebe7; --bg:#f4f4f2; --tile:#fff; --hl:#fff; --ink:#111; --on-ink:#fff; --muted:#6b6b68; --line:#dcdcd7;
     --soft:rgba(0,0,0,.05); --soft-2:rgba(0,0,0,.08); --clock:#e3e3df; --scrim:rgba(0,0,0,.2);
     --font:"Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
-    --out:cubic-bezier(.2,.8,.2,1); --expo:cubic-bezier(.16,1,.3,1); --leave:cubic-bezier(.5,0,.75,0);
+    --out:cubic-bezier(.2,.8,.2,1); --expo:cubic-bezier(.16,1,.3,1); --quint:cubic-bezier(.22,1,.36,1); --leave:cubic-bezier(.5,0,.75,0);
     --side:248px; --row:34px;
     color-scheme:light;
   }
@@ -45,8 +45,38 @@
   /* ---------- shell ---------- */
   .app { display:grid; grid-template-columns:var(--side) 1fr; height:100%; }
 
-  .side { display:flex; flex-direction:column; min-height:0; padding:16px 10px 10px; gap:10px; }
-  .brand { padding:0 6px 6px; }
+  .side { position:relative; display:flex; flex-direction:column; min-height:0; padding:16px 10px 10px; gap:10px; }
+
+  /* the logo: the squircle target at rest; it splits into the thick badge on hover (motion.py, take 3) */
+  .brand { position:relative; height:28px; margin:0 6px 6px; }
+  .logo { position:relative; display:block; height:28px; padding:0; border-radius:7px; text-align:left; }
+  .logo:focus-visible { outline-offset:4px; }
+  .logo > svg { position:absolute; left:0; top:0; height:28px; width:auto; overflow:visible; pointer-events:none; }
+  .logo .k { fill:var(--ink); } .logo .p { fill:var(--on-ink); }
+  .spwrap { position:absolute; left:0; top:0; height:28px; display:flex; align-items:center; pointer-events:none; }
+  .spname { display:block; font-size:13px; font-weight:650; color:var(--muted); white-space:nowrap; transition:color .15s var(--out); }
+  .logo:hover .spname, .logo[aria-expanded="true"] .spname { color:var(--ink); }
+
+  .spaces { position:absolute; z-index:30; top:52px; left:10px; width:228px; padding:6px; border-radius:12px; background:var(--tile);
+            border:1px solid var(--line); box-shadow:0 1px 2px rgba(0,0,0,.06); transform-origin:18px 0; outline:none; }
+  .spaces[hidden] { display:none; }
+  .spaces .sh { padding:6px 10px 6px; font-size:12px; font-weight:650; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sp { display:flex; align-items:center; gap:10px; width:100%; height:34px; padding:0 10px; border-radius:8px; text-align:left; font-size:13.5px; font-weight:600;
+        transition:background .15s var(--out), transform .11s var(--out), opacity .15s var(--out); }
+  .sp:hover, .sp:focus-visible, .sp.sel { background:var(--soft); outline:none; }
+  .sp.sel { background:var(--soft-2); }
+  .sp:active { transform:scale(.98); }
+  .sp[aria-disabled="true"] { opacity:.4; pointer-events:none; }
+  .sp .ck { width:14px; height:14px; flex:none; display:grid; place-items:center; }
+  .sp .ck svg { width:14px; height:14px; }
+  .sp .nm { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sp .n { display:inline-block; font-size:12px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .sp.add { color:var(--muted); }
+  .sp.add:hover { color:var(--ink); }
+  .spaces hr { border:0; height:1px; background:var(--line); margin:6px 4px; }
+  .flying { position:fixed; z-index:60; margin:0; pointer-events:none; transform-origin:10px 50%; }
+  .flying.tab, .flying:not(.ghost) { display:flex; align-items:center; gap:10px; padding:0 4px 0 10px; border-radius:8px; background:var(--hl);
+        border:1px solid var(--line); color:var(--ink); font-size:13.5px; font-weight:600; }
   .badge { display:inline-grid; place-items:center; padding:5px 8px 6px; border-radius:7px; background:var(--ink); color:var(--on-ink); }
   .badge svg { display:block; height:15px; width:auto; fill:currentColor; }
 
@@ -65,16 +95,14 @@
 
   .tabs { position:relative; flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; display:flex; flex-direction:column; gap:2px; scrollbar-width:none; }
   .hl { position:absolute; left:0; right:0; top:0; height:var(--row); border-radius:8px; background:var(--hl); border:1px solid var(--line);
-        transition:transform .22s var(--out), opacity .15s var(--out); pointer-events:none; }
+        transition:transform .42s var(--quint), opacity .15s var(--out); pointer-events:none; }
   .hl.now { transition:opacity .15s var(--out); }
   .tab { position:relative; display:flex; align-items:center; gap:10px; flex:none; height:var(--row); padding:0 4px 0 10px; border-radius:8px; cursor:default;
          font-size:13.5px; font-weight:550; color:var(--muted); user-select:none; touch-action:none;
-         transition:transform .22s var(--out), background .15s var(--out), color .15s var(--out), opacity .15s var(--out); }
+         transition:transform .3s var(--quint), background .15s var(--out), color .15s var(--out), opacity .15s var(--out); }
   .tab:hover { background:var(--soft); color:var(--ink); }
   .tab[aria-selected="true"] { background:none; color:var(--ink); font-weight:650; }
   .tab:focus-visible { outline-offset:-2px; }
-  .tab.in { animation:tab-in .22s var(--expo) both; }
-  .tab.closing { opacity:0; transform:scale(.97); transition:opacity .15s var(--leave), transform .15s var(--leave); pointer-events:none; }
   .tab.lifted { z-index:2; background:var(--hl); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.06); transition:opacity .15s var(--out); }
   .tab.away { opacity:.35; }
   .fav { width:16px; height:16px; flex:none; display:grid; place-items:center; }
@@ -183,7 +211,6 @@
 
   @keyframes fade { from { opacity:0; } }
   @keyframes in { from { opacity:0; transform:translateY(8px); } }
-  @keyframes tab-in { from { opacity:0; transform:translateX(-6px); } }
   @keyframes bye { to { opacity:0; transform:scale(.85); } }
   @keyframes roll-in { from { transform:translateY(108px); } }
   @keyframes roll-out { from { transform:none; } to { transform:translateY(-108px); } }
@@ -212,7 +239,10 @@
 <body>
 <div class="app">
   <aside class="side" id="side" aria-label="Tabs">
-    <div class="brand"><span class="badge">__BADGE__</span></div>
+    <div class="brand" id="brand">
+      <button class="logo" id="logo" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="spaces" aria-label="Spaces">__LOGO__<span class="spwrap" id="spWrap"><span class="spname" id="spName"></span></span></button>
+    </div>
+    <div class="spaces" id="spaces" role="menu" aria-label="Spaces" tabindex="-1" hidden></div>
     <form class="addr" id="addr" role="search">
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
       <input id="addrIn" placeholder="Search or enter address" aria-label="Address" autocomplete="off" spellcheck="false">
@@ -314,6 +344,7 @@
   const ICON = {
     x: '<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     plus: '<svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+    check: '<svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
     find: '<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>',
     globe: '<svg class="gl" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>',
     // the new tab's own icon: a rounded-square ring with a solid center
@@ -331,18 +362,30 @@
     holder.replaceChildren(img);
   }
 
-  // ---------- state ----------
-  let tabs = store.get("tgt-tabs");
-  if (!Array.isArray(tabs) || !tabs.length || !tabs.every(t => t && typeof t.id === "number")) tabs = [
-    { id: 1, u: null },
-    { id: 2, u: "https://en.wikipedia.org/wiki/Squircle" },
-    { id: 3, u: "https://github.com" },
-    { id: 4, u: "https://www.youtube.com" },
+  // ---------- motion ----------
+  const RM = matchMedia("(prefers-reduced-motion: reduce)");
+  const EASE = "cubic-bezier(.22,1,.36,1)";       // quint out: quick start, long soft landing
+  const EASE_IN = "cubic-bezier(.4,0,1,1)";        // for things that leave
+  const GLIDE = "cubic-bezier(.65,0,.35,1)";       // in-out, for things that travel across the screen
+  const anim = (el, kf, o) => el.animate(kf, RM.matches ? { ...o, duration: 0, delay: 0 } : o);
+  // take an element out of the flow right where it stands, so the rest can close the gap while it leaves
+  function lift(el, top = el.offsetTop) {
+    Object.assign(el.style, { position: "absolute", top: top + "px", left: 0, right: 0, pointerEvents: "none", transition: "none" });
+    el.removeAttribute("role"); el.setAttribute("aria-hidden", "true");
+  }
+
+  // ---------- state: spaces, each with its own tabs ----------
+  const seed = () => [
+    { id: 1, name: "Personal", active: 1, tabs: [{ id: 1, u: null }, { id: 2, u: "https://en.wikipedia.org/wiki/Squircle" }, { id: 4, u: "https://www.youtube.com" }] },
+    { id: 2, name: "Work", active: 3, tabs: [{ id: 3, u: "https://github.com" }, { id: 5, u: "https://docs.google.com" }, { id: 6, u: "https://en.wikipedia.org/wiki/Web_browser" }] },
   ];
-  let active = store.get("tgt-active");
-  if (!tabs.some(t => t.id === active)) active = tabs[0].id;
-  let nextId = Math.max(...tabs.map(t => t.id)) + 1;
-  const saveTabs = () => { store.set("tgt-tabs", tabs); store.set("tgt-active", active); };
+  const okSpace = s => s && typeof s.id === "number" && typeof s.name === "string" && Array.isArray(s.tabs) && s.tabs.length && s.tabs.every(t => t && typeof t.id === "number");
+  let spaces = store.get("tgt-spaces");
+  if (!Array.isArray(spaces) || !spaces.length || !spaces.every(okSpace)) spaces = seed();
+  let cur = spaces.find(s => s.id === store.get("tgt-space")) || spaces[0];
+  let tabs = cur.tabs, active = tabs.some(t => t.id === cur.active) ? cur.active : tabs[0].id;
+  let nextId = Math.max(...spaces.flatMap(s => s.tabs.map(t => t.id))) + 1;
+  const saveTabs = () => { cur.active = active; store.set("tgt-spaces", spaces); store.set("tgt-space", cur.id); };
   const tabById = id => tabs.find(t => t.id === id);
 
   const DEFAULTS = [
@@ -361,18 +404,21 @@
   const isShortcut = u => list.some(s => same(s.u, u));
 
   // ---------- tabs ----------
-  const tabsEl = $("#tabs"), hl = $("#hl"), nodes = new Map();
+  const tabsEl = $("#tabs"), hl = $("#hl"), newBtn = $("#newBtn");
+  let nodes = new Map();
 
   function tabNode(t) {
-    let el = nodes.get(t.id);
+    let el = nodes.get(t.id), fresh = false;
     if (!el) {
       el = document.createElement("div");
-      el.className = "tab in"; el.dataset.id = t.id; el.setAttribute("role", "tab"); el.tabIndex = -1;
+      el.className = "tab"; el.dataset.id = t.id; el.setAttribute("role", "tab"); el.tabIndex = -1;
       el.innerHTML = `<span class="fav"></span><span class="tt"></span><button class="x" type="button" tabindex="-1">${ICON.x}</button>`;
-      el.addEventListener("animationend", () => el.classList.remove("in"), { once: true });
-      nodes.set(t.id, el);
+      nodes.set(t.id, el); fresh = true;
     }
     if (el.dataset.u !== String(t.u)) {
+      if (!fresh)   // the page changed: icon and title settle in
+        [el.querySelector(".fav"), el.querySelector(".tt")].forEach(c =>
+          anim(c, [{ opacity: 0, transform: "translateX(-4px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EASE }));
       el.dataset.u = String(t.u);
       setIcon(el.querySelector(".fav"), t.u);
       const title = titleFor(t.u);
@@ -384,18 +430,25 @@
     return el;
   }
 
-  // re-render in order; everything that moved glides to its new place (FLIP, transform only)
-  function renderTabs(instant) {
-    const before = new Map([...nodes].map(([id, el]) => [id, el.getBoundingClientRect().top]));
-    tabs.forEach(t => { const el = tabNode(t); el.style.transition = "none"; el.style.transform = ""; tabsEl.appendChild(el); });
+  const tops = () => new Map([...nodes].map(([id, el]) => [id, el.getBoundingClientRect().top]));
+  // put every tab in order; whatever moved glides from where it was (FLIP, transform only)
+  function renderTabs(o = {}) {
+    const before = o.before || tops();
     tabs.forEach(t => {
+      const el = tabNode(t);
+      el.getAnimations().forEach(a => a.cancel());
+      el.style.transition = "none"; el.style.transform = "";
+      tabsEl.appendChild(el);
+    });
+    if (!o.instant) tabs.forEach(t => {
       const el = nodes.get(t.id), b = before.get(t.id);
-      const dy = b === undefined || instant ? 0 : b - el.getBoundingClientRect().top;
-      if (dy) el.style.transform = `translateY(${dy}px)`;
+      if (b === undefined) return;
+      const dy = b - el.getBoundingClientRect().top;
+      if (Math.abs(dy) > .5) anim(el, [{ transform: `translateY(${dy}px)` }, { transform: "none" }], { duration: 420, easing: EASE });
     });
     void tabsEl.offsetHeight;
-    tabs.forEach(t => { const el = nodes.get(t.id); el.style.transition = ""; el.style.transform = ""; });
-    placeHl(instant);
+    tabs.forEach(t => { nodes.get(t.id).style.transition = ""; });
+    placeHl(o.instant);
   }
   function placeHl(instant, y) {
     const el = nodes.get(active);
@@ -414,29 +467,71 @@
     document.body.classList.remove("drawer");
   }
   function openTab(u = null) {
-    const t = { id: nextId++, u };
-    tabs.push(t); active = t.id; saveTabs(); renderTabs(); showView();
-    nodes.get(t.id).scrollIntoView({ block: "nearest" });
+    const t = { id: nextId++, u }, before = tops();
+    tabs.push(t); active = t.id; saveTabs(); renderTabs({ before }); showView();
+    const el = nodes.get(t.id);
+    el.scrollIntoView({ block: "nearest" });
+    // the new tab drops out of the "New tab" button into its slot, and the highlight rides along with it
+    const dy = newBtn.getBoundingClientRect().top - el.getBoundingClientRect().top;
+    anim(el, [{ opacity: 0, transform: `translateY(${dy}px) scale(.94)` }, { opacity: 1, transform: "none" }], { duration: 420, easing: EASE });
+    placeHl(true, el.offsetTop + dy);
+    requestAnimationFrame(() => placeHl());
     if (!u) setTimeout(() => $("#q").focus(), 40);
   }
+  function dropFrame(id) { const f = frames.get(id); if (f) { f.remove(); frames.delete(id); } }
+  // after a tab leaves this space, pick the neighbour; a space is never left empty
+  function refill(k, wasActive) {
+    if (!tabs.length) {
+      const t = { id: nextId++, u: null };
+      tabs.push(t); active = t.id;
+      requestAnimationFrame(() => { const el = nodes.get(t.id); if (el) anim(el, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 360, easing: EASE }); });
+    } else if (wasActive) active = (tabs[k] || tabs[k - 1]).id;
+  }
   function closeTab(id) {
-    const el = nodes.get(id);
-    if (!el || el.classList.contains("closing")) return;
-    el.classList.add("closing");
-    if (id === active) hl.style.opacity = 0;
-    setTimeout(() => {
-      const k = tabs.findIndex(t => t.id === id);
-      if (k < 0) return;
-      tabs.splice(k, 1); el.remove(); nodes.delete(id);
-      const f = frames.get(id); if (f) { f.remove(); frames.delete(id); }
-      if (!tabs.length) { openTab(); return; }
-      if (id === active) active = (tabs[k] || tabs[k - 1]).id;
-      saveTabs(); renderTabs(); showView();
-    }, 150);
+    const el = nodes.get(id), k = tabs.findIndex(t => t.id === id);
+    if (!el || k < 0) return;
+    const before = tops();
+    tabs.splice(k, 1); nodes.delete(id); dropFrame(id);
+    lift(el);
+    anim(el, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateX(-14px) scale(.96)" }],
+         { duration: 220, easing: EASE_IN, fill: "forwards" }).onfinish = () => el.remove();
+    refill(k, id === active);
+    saveTabs(); renderTabs({ before }); showView();
   }
   function navigate(u) {
     const t = tabById(active);
     t.u = u; saveTabs(); renderTabs(); showView();
+  }
+
+  // a copy of `src` travels from box a to box b on a slight arc, shrinking as it goes
+  function fly(src, a, b) {
+    const c = src.cloneNode(true);
+    c.className = "flying"; c.removeAttribute("id"); c.setAttribute("aria-hidden", "true");
+    Object.assign(c.style, { left: a.left + "px", top: a.top + "px", width: a.width + "px", height: a.height + "px", transform: "" });
+    document.body.appendChild(c);
+    const dx = b.left + 14 - a.left - 10, dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    anim(c, [
+      { opacity: 1, transform: "none" },
+      { opacity: 1, transform: `translate(${dx * .5}px, ${dy * .5 - 22}px) scale(.78)`, offset: .5 },
+      { opacity: 0, transform: `translate(${dx}px, ${dy}px) scale(.4)` },
+    ], { duration: 580, easing: GLIDE, fill: "forwards" }).onfinish = () => c.remove();
+  }
+  function moveTab(id, sid, from) {
+    const sp = spaces.find(s => s.id === sid), el = nodes.get(id), k = tabs.findIndex(t => t.id === id);
+    if (!sp || sp === cur || !el || k < 0) return;
+    const start = (from || el).getBoundingClientRect(), before = tops();
+    const item = spMenu.hidden ? null : spMenu.querySelector(`.sp[data-sid="${sid}"]`);
+    fly(from || el, start, (item || logoBtn).getBoundingClientRect());
+    const [t] = tabs.splice(k, 1); nodes.delete(id); el.remove();
+    sp.tabs.push(t);
+    refill(k, id === active);
+    saveTabs(); renderTabs({ before }); showView();
+    if (item) setTimeout(() => {   // the space it landed in counts it
+      const n = item.querySelector(".n"); n.textContent = sp.tabs.length;
+      anim(n, [{ transform: "scale(1)" }, { transform: "scale(1.45)" }, { transform: "scale(1)" }], { duration: 380, easing: EASE });
+      const here = spMenu.querySelector(`.sp[data-sid="${cur.id}"] .n`); if (here) here.textContent = tabs.length;
+    }, 420);
+    setTimeout(closeSpaces, 900);
   }
 
   $("#newBtn").addEventListener("click", () => openTab());
@@ -445,6 +540,10 @@
     if (x) { e.stopPropagation(); closeTab(+x.closest(".tab").dataset.id); }
   });
   tabsEl.addEventListener("auxclick", e => { const el = e.target.closest(".tab"); if (el && e.button === 1) closeTab(+el.dataset.id); });
+  tabsEl.addEventListener("contextmenu", e => {
+    const el = e.target.closest(".tab"); if (!el) return;
+    e.preventDefault(); openSpaces({ pinned: true, move: +el.dataset.id }); showSpaces(true);
+  });
   tabsEl.addEventListener("keydown", e => {
     const el = e.target.closest(".tab"); if (!el) return;
     const k = tabs.findIndex(t => t.id === +el.dataset.id);
@@ -455,8 +554,188 @@
     } else if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); closeTab(+el.dataset.id); }
   });
 
-  // ---------- drag: reorder inside the sidebar, or drop on the shortcuts row ----------
+  // ---------- spaces ----------
+  const spMenu = $("#spaces"), logoBtn = $("#logo"), spWrap = $("#spWrap"), spName = $("#spName");
+  let spMode = null;   // null when closed, else { pinned, move: tab id or null }
+  function newSpace() {
+    let n = spaces.length + 1;
+    while (spaces.some(s => s.name === "Space " + n)) n++;
+    const s = { id: Math.max(...spaces.map(s => s.id)) + 1, name: "Space " + n, tabs: [{ id: nextId++, u: null }] };
+    s.active = s.tabs[0].id; spaces.push(s); saveTabs();
+    return s;
+  }
+  function switchSpace(sid) {
+    const sp = spaces.find(s => s.id === sid);
+    if (!sp || sp === cur) return;
+    const dir = spaces.indexOf(sp) > spaces.indexOf(cur) ? 1 : -1;
+    saveTabs();
+    // the old list slides off one way while the new one slides in from the other, tab by tab
+    const old = [...nodes.values()], ys = old.map(el => el.offsetTop);
+    old.forEach((el, i) => {
+      el.getAnimations().forEach(a => a.cancel());
+      lift(el, ys[i]);
+      anim(el, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: `translateX(${-dir * 40}px)` }],
+           { duration: 240, delay: i * 14, easing: EASE_IN, fill: "forwards" }).onfinish = () => el.remove();
+    });
+    nodes = new Map();
+    cur = sp; tabs = sp.tabs; active = tabs.some(t => t.id === sp.active) ? sp.active : tabs[0].id;
+    renderTabs({ instant: true });
+    const enter = i => ({ duration: 560, delay: 90 + i * 30, easing: EASE, fill: "backwards" });
+    tabs.forEach((t, i) => anim(nodes.get(t.id), [{ opacity: 0, transform: `translateX(${dir * 40}px)` }, { opacity: 1, transform: "none" }], enter(i)));
+    const y = hl.style.transform;
+    anim(hl, [{ opacity: 0, transform: `${y} translateX(${dir * 40}px)` }, { opacity: 1, transform: y }], enter(tabs.findIndex(t => t.id === active)));
+    setSpaceName(dir);
+    showView({ dir });
+    saveTabs();
+    if (!spMenu.hidden) markSpaces();
+  }
+  function setSpaceName(dir) {
+    if (!dir) { spName.textContent = cur.name; return sizeLogo(); }
+    anim(spName, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: `translateY(${-dir * 8}px)` }], { duration: 140, easing: EASE_IN }).onfinish = () => {
+      spName.textContent = cur.name; sizeLogo();
+      anim(spName, [{ opacity: 0, transform: `translateY(${dir * 8}px)` }, { opacity: 1, transform: "none" }], { duration: 420, easing: EASE });
+    };
+  }
+
+  function renderSpaces() {
+    const mv = spMode && spMode.move != null ? tabById(spMode.move) : null;
+    const head = document.createElement("p"); head.className = "sh";
+    head.textContent = mv ? `Move “${titleFor(mv.u)}” to` : "Spaces";
+    const items = spaces.map(s => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "sp"; b.dataset.sid = s.id;
+      b.setAttribute("role", mv ? "menuitem" : "menuitemradio");
+      if (mv && s === cur) b.setAttribute("aria-disabled", "true");
+      b.innerHTML = `<span class="ck"></span><span class="nm"></span><span class="n"></span>`;
+      b.querySelector(".nm").textContent = s.name; b.querySelector(".n").textContent = s.tabs.length;
+      b.addEventListener("click", () => {
+        if (mv) { if (s !== cur) moveTab(mv.id, s.id); return; }
+        switchSpace(s.id); if (spMode && spMode.pinned) setTimeout(closeSpaces, 260);
+      });
+      return b;
+    });
+    const line = document.createElement("hr");
+    const add = document.createElement("button");
+    add.type = "button"; add.className = "sp add"; add.setAttribute("role", "menuitem");
+    add.innerHTML = `<span class="ck">${ICON.plus}</span><span class="nm">New space</span>`;
+    add.addEventListener("click", () => {
+      const s = newSpace();
+      if (mv) { renderSpaces(); moveTab(mv.id, s.id); } else { switchSpace(s.id); renderSpaces(); setTimeout(closeSpaces, 420); }
+    });
+    spMenu.replaceChildren(head, ...items, line, add);
+    markSpaces();
+  }
+  function markSpaces() {
+    spMenu.querySelectorAll(".sp[data-sid]").forEach(b => {
+      const on = +b.dataset.sid === cur.id;
+      if (b.getAttribute("role") === "menuitemradio") b.setAttribute("aria-checked", on);
+      const ck = b.querySelector(".ck");
+      if (on && !ck.firstChild) { ck.innerHTML = ICON.check; anim(ck, [{ opacity: 0, transform: "scale(.6)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: EASE }); }
+      if (!on) ck.replaceChildren();
+      b.querySelector(".n").textContent = spaces.find(s => s.id === +b.dataset.sid).tabs.length;
+    });
+  }
+  function openSpaces(o = {}) {
+    spMode = { pinned: !!o.pinned, move: o.move ?? null };
+    L.wantOpen = true; morph(END);
+    if (!spMenu.hidden) renderSpaces();
+  }
+  function showSpaces(focus) {
+    if (!spMode) return;
+    if (!spMenu.hidden) return;
+    renderSpaces();
+    spMenu.hidden = false; logoBtn.setAttribute("aria-expanded", true);
+    spMenu.getAnimations().forEach(a => a.cancel());
+    anim(spMenu, [{ opacity: 0, transform: "translateY(-6px) scale(.97)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EASE });
+    [...spMenu.children].forEach((c, i) =>
+      anim(c, [{ opacity: 0, transform: "translateY(-5px)" }, { opacity: 1, transform: "none" }], { duration: 360, delay: 20 + i * 30, easing: EASE, fill: "backwards" }));
+    if (focus) (spMenu.querySelector(".sp:not([aria-disabled='true'])") || spMenu).focus();
+  }
+  function closeSpaces() {
+    if (!spMode) return;
+    spMode = null; L.wantOpen = false;
+    if (!inLogo) morph(0);
+    if (spMenu.hidden) return;
+    logoBtn.setAttribute("aria-expanded", false);
+    anim(spMenu, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(-4px) scale(.98)" }], { duration: 160, easing: EASE_IN })
+      .onfinish = () => { if (!spMode) spMenu.hidden = true; };
+  }
+
+  // hover the logo: it splits into the thick badge, and the spaces appear under it
+  let inLogo = false, inMenu = false, leaveT = 0;
+  const later = () => { clearTimeout(leaveT); leaveT = setTimeout(() => {
+    if (!inLogo && !inMenu && !document.body.classList.contains("dragging")) { if (spMode && !spMode.pinned) closeSpaces(); else if (!spMode) morph(0); }
+  }, 180); };
+  logoBtn.addEventListener("pointerenter", e => { if (e.pointerType === "touch") return; inLogo = true; clearTimeout(leaveT); if (!spMode) openSpaces(); else morph(END); });
+  logoBtn.addEventListener("pointerleave", () => { inLogo = false; later(); });
+  spMenu.addEventListener("pointerenter", () => { inMenu = true; clearTimeout(leaveT); });
+  spMenu.addEventListener("pointerleave", () => { inMenu = false; later(); });
+  logoBtn.addEventListener("click", e => {
+    if (spMode && spMode.pinned) { closeSpaces(); return; }
+    openSpaces({ pinned: true }); showSpaces(e.detail === 0);
+  });
+  spMenu.addEventListener("keydown", e => {
+    const items = [...spMenu.querySelectorAll(".sp:not([aria-disabled='true'])")], k = items.indexOf(document.activeElement);
+    if (e.key === "Escape") { closeSpaces(); logoBtn.focus(); }
+    else if ((e.key === "ArrowDown" || e.key === "ArrowUp") && items.length) {
+      e.preventDefault(); items[(k + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length].focus();
+    }
+  });
+  document.addEventListener("pointerdown", e => {
+    if (spMode && !spMenu.contains(e.target) && !logoBtn.contains(e.target)) closeSpaces();
+  });
+  // two-finger swipe sideways over the sidebar moves between spaces
+  let swipe = 0, swipeAt = 0, swipeLock = 0;
+  $("#side").addEventListener("wheel", e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    const now = performance.now();
+    if (now < swipeLock) return;
+    if (now - swipeAt > 220) swipe = 0;
+    swipeAt = now; swipe += e.deltaX;
+    if (Math.abs(swipe) > 70) {
+      const next = spaces[spaces.indexOf(cur) + Math.sign(swipe)];
+      swipe = 0; swipeLock = now + 650;
+      if (next) switchSpace(next.id);
+    }
+  }, { passive: false });
+
+  // the logo: motion.py's Split take, embedded paused and scrubbed from here, so it plays forward on hover and back on leave
+  const logoSvg = logoBtn.querySelector("svg"), END = 1.62, OPEN_AT = .98;
+  const L = { t: 0, to: 0, raf: 0, last: 0, wantOpen: false };
+  const bez = (x1, y1, x2, y2) => t => {
+    let lo = 0, hi = 1, u = .5;
+    for (let i = 0; i < 32; i++) { u = (lo + hi) / 2; if (3 * (1 - u) ** 2 * u * x1 + 3 * (1 - u) * u * u * x2 + u ** 3 < t) lo = u; else hi = u; }
+    return 3 * (1 - u) ** 2 * u * y1 + 3 * (1 - u) * u * u * y2 + u ** 3;
+  };
+  const growth = bez(.62, 0, .18, 1);    // the block's own curve in motion.py (take_split, k_fn)
+  const grown = t => t <= .42 ? 0 : t >= 1.15 ? 1 : growth((t - .42) / .73);
+  function morph(to) {
+    L.to = to;
+    if (RM.matches) { L.t = to; drawLogo(); return; }
+    if (!L.raf) { L.last = performance.now(); L.raf = requestAnimationFrame(stepLogo); }
+  }
+  function stepLogo(now) {
+    const dt = Math.min(.05, (now - L.last) / 1000); L.last = now;
+    if (L.to > L.t) L.t = Math.min(L.to, Math.max(L.t, .2) + dt * 1.6);   // the first .2s of the take is still
+    else L.t = Math.max(L.to, L.t - dt * 2.2);
+    drawLogo();
+    L.raf = L.t !== L.to ? requestAnimationFrame(stepLogo) : 0;
+  }
+  let labelW = 0;
+  function sizeLogo() { labelW = spName.offsetWidth; drawLogo(); }
+  function drawLogo() {
+    try { logoSvg.pauseAnimations(); logoSvg.setCurrentTime(L.t); } catch (e) {}
+    const h = logoSvg.getBoundingClientRect().height || 28, ring = 150 / 170 * h, full = 456 / 170 * h;
+    const x = ring + (full - ring) * grown(L.t) + 10;
+    spWrap.style.transform = `translateX(${x}px)`;
+    logoBtn.style.width = Math.max(full, x + labelW) + 8 + "px";
+    if (L.wantOpen && L.t >= OPEN_AT) showSpaces();
+  }
+
+  // ---------- drag: reorder, drop on the shortcuts row, or carry a tab to another space ----------
   const ghost = $("#ghost"), row = $("#row");
+  const inside = (r, ev, pad = 0) => ev.clientX > r.left - pad && ev.clientX < r.right + pad && ev.clientY > r.top - pad && ev.clientY < r.bottom + pad;
   tabsEl.addEventListener("pointerdown", e => {
     const el = e.target.closest(".tab");
     if (!el || e.button !== 0 || e.target.closest(".x")) return;
@@ -475,29 +754,44 @@
 
   function startDrag(el, id, sy) {
     const els = tabs.map(t => nodes.get(t.id));
+    els.forEach(x => x.getAnimations().forEach(a => a.finish()));
     const from = tabs.findIndex(t => t.id === id);
     const step = els.length > 1 ? els[1].offsetTop - els[0].offsetTop : el.offsetHeight + 2;
     const t = tabById(id);
     document.body.classList.add("dragging");
     el.classList.add("lifted");
-    if (t.u) setIcon(ghost, t.u);  // replaces children; the brackets live on ::after
+    setIcon(ghost, t.u);
     const canDrop = () => !!t.u && tabById(active).u === null && list.length < MAX && !isShortcut(t.u);
-    return { el, id, t, els, from, to: from, step, sy, out: false, over: false, canDrop };
+    return { el, id, t, els, from, to: from, step, sy, mode: "list", over: false, sp: null, spring: 0, canDrop };
   }
   function dragTo(d, ev) {
-    const side = $("#side").getBoundingClientRect();
-    const out = ev.clientX > side.right && d.canDrop();
-    if (out !== d.out) {
-      d.out = out;
-      d.el.classList.toggle("away", out); ghost.classList.toggle("show", out); row.classList.toggle("receiving", out);
+    const side = $("#side").getBoundingClientRect(), brand = $("#brand").getBoundingClientRect();
+    const nearSpaces = inside(brand, ev, 6) || (!spMenu.hidden && inside(spMenu.getBoundingClientRect(), ev, 8));
+    // hold a tab over the logo and the spaces open, ready to take it
+    if (nearSpaces && !d.spring && spMenu.hidden) d.spring = setTimeout(() => { openSpaces({ pinned: true, move: d.id }); showSpaces(); }, 200);
+    if (!nearSpaces && d.spring && spMenu.hidden) { clearTimeout(d.spring); d.spring = 0; }
+    const mode = nearSpaces && !spMenu.hidden ? "menu" : ev.clientX > side.right && d.canDrop() ? "out" : "list";
+    if (mode !== d.mode) {
+      d.mode = mode;
+      const away = mode !== "list";
+      d.el.classList.toggle("away", away); ghost.classList.toggle("show", away); row.classList.toggle("receiving", mode === "out");
+      if (mode !== "out") { d.over = false; row.classList.remove("over"); }
+      ghost.classList.add("on");
     }
     let dy = 0;
-    if (out) {
+    if (mode !== "list") {
       ghost.style.transform = `translate(${ev.clientX - 26}px, ${ev.clientY - 26}px)`;
-      const r = row.getBoundingClientRect();
-      const over = ev.clientX > r.left - 40 && ev.clientX < r.right + 40 && ev.clientY > r.top - 40 && ev.clientY < r.bottom + 40;
-      if (over !== d.over) { d.over = over; row.classList.toggle("over", over); ghost.classList.toggle("on", !over); }
       d.to = d.from; d.el.style.transform = "";
+      if (mode === "out") {
+        const over = inside(row.getBoundingClientRect(), ev, 40);
+        if (over !== d.over) { d.over = over; row.classList.toggle("over", over); ghost.classList.toggle("on", !over); }
+      } else {
+        const it = document.elementFromPoint(ev.clientX, ev.clientY)?.closest(".sp[data-sid]:not([aria-disabled='true'])");
+        spMenu.querySelectorAll(".sp.sel").forEach(b => b !== it && b.classList.remove("sel"));
+        if (it) it.classList.add("sel");
+        d.sp = it ? +it.dataset.sid : null;
+        ghost.classList.toggle("on", !it);
+      }
     } else {
       dy = Math.max(-d.from * d.step, Math.min((d.els.length - 1 - d.from) * d.step, ev.clientY - d.sy));
       d.to = Math.round(d.from + dy / d.step);
@@ -510,10 +804,19 @@
     });
   }
   function endDrag(d) {
+    clearTimeout(d.spring);
     document.body.classList.remove("dragging");
-    d.el.classList.remove("lifted", "away"); ghost.classList.remove("show"); ghost.classList.add("on");
+    d.el.classList.remove("lifted", "away");
     row.classList.remove("receiving", "over");
-    if (d.out && d.over) addShortcut(d.t.u);
+    if (d.mode === "menu" && d.sp) {
+      moveTab(d.id, d.sp, ghost);
+      ghost.classList.remove("show"); ghost.classList.add("on");
+      return;
+    }
+    ghost.classList.remove("show"); ghost.classList.add("on");
+    spMenu.querySelectorAll(".sp.sel").forEach(b => b.classList.remove("sel"));
+    if (spMode && spMode.move === d.id) closeSpaces();
+    if (d.mode === "out" && d.over) addShortcut(d.t.u);
     if (d.to !== d.from) { const [t] = tabs.splice(d.from, 1); tabs.splice(d.to, 0, t); saveTabs(); }
     renderTabs();
   }
@@ -532,7 +835,8 @@
 
   // ---------- views ----------
   const panel = $("#panel"), ntp = $("#ntp"), blocked = $("#blocked"), frames = new Map();
-  function showView() {
+  let lastView = null, lastTab = null;
+  function showView(o = {}) {
     const t = tabById(active);
     let view = ntp;
     if (t.u && frameable(t.u)) {
@@ -553,6 +857,10 @@
       $("#bGo").href = t.u;
     }
     for (const v of [ntp, blocked, ...frames.values()]) v.classList.toggle("on", v === view);
+    if (lastView && (view !== lastView || t.id !== lastTab))   // the page settles in; sideways when the space changed
+      anim(view, [{ opacity: 0, transform: o.dir ? `translateX(${o.dir * 28}px)` : "scale(.985)" }, { opacity: 1, transform: "none" }],
+           { duration: o.dir ? 560 : 380, easing: EASE });
+    lastView = view; lastTab = t.id;
     ntp.inert = view !== ntp; blocked.inert = view !== blocked;
     if (view !== ntp) { closePick(); hideSug(); }
     syncAddr();
@@ -691,7 +999,7 @@
   // ---------- narrow screens: the sidebar is a drawer ----------
   $("#menu").addEventListener("click", () => document.body.classList.add("drawer"));
   $("#scrim").addEventListener("click", () => document.body.classList.remove("drawer"));
-  addEventListener("keydown", e => { if (e.key === "Escape") document.body.classList.remove("drawer"); });
+  addEventListener("keydown", e => { if (e.key === "Escape") { document.body.classList.remove("drawer"); closeSpaces(); } });
 
   // ---------- the clock: drawn digits that roll when they change ----------
   const svg = $("#clock");
@@ -721,8 +1029,8 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden) draw(false); });
 
   // ---------- go ----------
-  renderTabs(true); showView(); renderRow();
-  nodes.forEach(el => el.classList.remove("in"));
+  renderTabs({ instant: true }); showView(); renderRow();
+  setSpaceName(0);
   setTimeout(() => row.classList.add("settled"), 900);
 </script>
 </body>

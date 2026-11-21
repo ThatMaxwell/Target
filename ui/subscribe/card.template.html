@@ -36,7 +36,9 @@
   .sky::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, var(--paper) 100%); }
 
   .head { position:relative; z-index:1; margin-top:-92px; padding:0 26px; }
-  .head h1 svg { display:block; height:58px; width:auto; color:var(--ink); fill:currentColor; }
+  /* the app's badge (15px tall there), scaled up: every size is in em so the proportions stay identical */
+  .badge { display:inline-grid; place-items:center; font-size:44px; padding:.333em .533em .4em; border-radius:.467em; background:var(--ink); color:var(--on-ink); }
+  .badge svg { display:block; height:1em; width:auto; fill:currentColor; }
   .price { display:flex; align-items:baseline; gap:6px; margin-top:12px; }
   .price b { font-size:22px; font-weight:800; letter-spacing:-.02em; }
   .price span { font-size:13.5px; font-weight:550; color:var(--muted); }
@@ -68,7 +70,7 @@
     <img src="sky.jpg" alt="">
   </div>
   <div class="head">
-    <h1 id="plan" aria-label="Target Plus">__WORD__</h1>
+    <h1 id="plan" aria-label="Target Plus"><span class="badge">__BADGE__</span></h1>
     <p class="price"><b>$4</b><span>a month, after a 14-day trial</span></p>
   </div>
   <div class="body">

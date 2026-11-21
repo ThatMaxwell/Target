@@ -31,7 +31,7 @@
   svg.i { width:14px; height:14px; flex:none; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
   .gl { fill:none; stroke:currentColor; stroke-width:1.8; color:var(--muted); }
 
-  /* lock-on: focus brackets that snap onto the thing you're about to act on */
+  /* lock-on brackets: only on the search field while you type. Never on selection (hovered, picked or dropped-on items). */
   .lock { position:relative; }
   .lock::after { content:""; position:absolute; inset:var(--in, -7px); pointer-events:none; opacity:0; transform:scale(1.08); --c:var(--ink); --l:var(--len, 13px); --w:2.5px;
     background:
@@ -159,8 +159,8 @@
                     transition:transform .15s var(--out), border-color .15s var(--out); }
   .sc a:hover, .sc .add:hover { transform:translateY(-3px); border-color:var(--muted); }
   .sc a:active, .sc .add:active { transform:scale(.96); }
-  .sc a:focus-visible, .sc .add:focus-visible { outline:none; }
-  .sc a:hover::after, .sc a:focus-visible::after, .sc .add:hover::after, .sc .add:focus-visible::after, .sc .add[aria-expanded="true"]::after { opacity:1; transform:none; }
+  .sc a:focus-visible, .sc .add:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+  .sc .add[aria-expanded="true"] { border-color:var(--ink); color:var(--ink); }
   .sc .ic, .sc .ic img, .sc .ic svg { width:36px; height:36px; border-radius:9px; object-fit:contain; display:block; }
   .sc .ic svg { padding:5px; }
   .sc .add { background:transparent; color:var(--muted); }
@@ -168,7 +168,6 @@
   .sc.plus { transition:opacity .2s var(--out); }
   .row:not(:hover):not(:focus-within):not(.receiving):not(.picking) .sc.plus { opacity:0; }
   .row.over .sc.plus .add { border-color:var(--ink); border-style:solid; transform:scale(1.04); }
-  .row.over .sc.plus .add::after { opacity:1; transform:none; }
   .row.receiving .sc.plus .add { border-style:dashed; border-color:var(--muted); }
   .lbl { position:absolute; top:calc(100% + 10px); left:50%; transform:translate(-50%, -4px); opacity:0; pointer-events:none; white-space:nowrap;
          font-size:12.5px; font-weight:600; color:var(--muted); transition:opacity .15s var(--out), transform .15s var(--out); }
@@ -191,7 +190,7 @@
 
   /* the drag ghost when a tab leaves the sidebar */
   .ghost { position:fixed; left:0; top:0; z-index:50; width:52px; height:52px; border-radius:14px; display:grid; place-items:center; background:var(--tile);
-           box-shadow:0 1px 2px rgba(0,0,0,.06); pointer-events:none; opacity:0; transition:opacity .11s var(--out); --in:-6px; --len:11px; }
+           box-shadow:0 1px 2px rgba(0,0,0,.06); pointer-events:none; opacity:0; transition:opacity .11s var(--out); }
   .ghost.show { opacity:1; }
   .ghost img, .ghost svg { width:28px; height:28px; border-radius:7px; object-fit:contain; }
 
@@ -292,7 +291,7 @@
   </main>
 </div>
 <div class="scrim" id="scrim"></div>
-<div class="ghost lock on" id="ghost" aria-hidden="true"></div>
+<div class="ghost" id="ghost" aria-hidden="true"></div>
 
 <script>
   const $ = s => document.querySelector(s);
@@ -776,7 +775,6 @@
       const away = mode !== "list";
       d.el.classList.toggle("away", away); ghost.classList.toggle("show", away); row.classList.toggle("receiving", mode === "out");
       if (mode !== "out") { d.over = false; row.classList.remove("over"); }
-      ghost.classList.add("on");
     }
     let dy = 0;
     if (mode !== "list") {
@@ -784,13 +782,12 @@
       d.to = d.from; d.el.style.transform = "";
       if (mode === "out") {
         const over = inside(row.getBoundingClientRect(), ev, 40);
-        if (over !== d.over) { d.over = over; row.classList.toggle("over", over); ghost.classList.toggle("on", !over); }
+        if (over !== d.over) { d.over = over; row.classList.toggle("over", over); }
       } else {
         const it = document.elementFromPoint(ev.clientX, ev.clientY)?.closest(".sp[data-sid]:not([aria-disabled='true'])");
         spMenu.querySelectorAll(".sp.sel").forEach(b => b !== it && b.classList.remove("sel"));
         if (it) it.classList.add("sel");
         d.sp = it ? +it.dataset.sid : null;
-        ghost.classList.toggle("on", !it);
       }
     } else {
       dy = Math.max(-d.from * d.step, Math.min((d.els.length - 1 - d.from) * d.step, ev.clientY - d.sy));
@@ -810,10 +807,10 @@
     row.classList.remove("receiving", "over");
     if (d.mode === "menu" && d.sp) {
       moveTab(d.id, d.sp, ghost);
-      ghost.classList.remove("show"); ghost.classList.add("on");
+      ghost.classList.remove("show");
       return;
     }
-    ghost.classList.remove("show"); ghost.classList.add("on");
+    ghost.classList.remove("show");
     spMenu.querySelectorAll(".sp.sel").forEach(b => b.classList.remove("sel"));
     if (spMode && spMode.move === d.id) closeSpaces();
     if (d.mode === "out" && d.over) addShortcut(d.t.u);
@@ -931,7 +928,7 @@
     list.forEach((s, i) => {
       const el = document.createElement("div");
       el.className = "sc" + (i === fresh ? " fresh" : ""); el.style.setProperty("--i", i);
-      el.innerHTML = `<a class="lock"><span class="ic"></span></a><span class="lbl"></span><button class="rm" type="button">${ICON.x}</button>`;
+      el.innerHTML = `<a><span class="ic"></span></a><span class="lbl"></span><button class="rm" type="button">${ICON.x}</button>`;
       const a = el.querySelector("a"); a.href = s.u; a.setAttribute("aria-label", s.n);
       a.addEventListener("click", e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); navigate(s.u); });
       el.querySelector(".lbl").textContent = s.n;
@@ -946,7 +943,7 @@
     if (list.length < MAX) {
       const el = document.createElement("div");
       el.className = "sc plus"; el.style.setProperty("--i", list.length);
-      el.innerHTML = `<button class="add lock" type="button" id="addBtn" aria-label="Add a shortcut" aria-haspopup="dialog" aria-expanded="false">${ICON.plus}</button>`;
+      el.innerHTML = `<button class="add" type="button" id="addBtn" aria-label="Add a shortcut" aria-haspopup="dialog" aria-expanded="false">${ICON.plus}</button>`;
       el.querySelector("button").addEventListener("click", e => { e.stopPropagation(); pick.hidden ? openPick() : closePick(); });
       row.appendChild(el);
     }

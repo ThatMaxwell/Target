@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- The simplest badge. The t sits slightly left of center. -->
+  <circle cx="50" cy="50" r="46" fill="#111"/><path transform="translate(36 22) scale(0.58)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff" />
+</svg>

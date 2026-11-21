@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Unbounded:wght@900&family=Rubik:wght@900&family=Anton&family=Familjen+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f4f2; --tile:#fff; --ink:#111; --muted:#6b6b68; --line:#e2e2de; --soft:#ebebe7; --accent:#FFD500; --out:cubic-bezier(.2,.8,.2,1); }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font:15px/1.45 "Archivo", system-ui, sans-serif; padding:40px 16px 96px; }
+  main { max-width:1180px; margin:0 auto; }
+  h1 { font-weight:900; font-stretch:115%; font-size:clamp(40px,7vw,72px); letter-spacing:-0.04em; line-height:.9; }
+  .lead { color:var(--muted); max-width:62ch; margin:12px 0 24px; }
+  .bar { position:sticky; top:0; z-index:2; background:var(--bg); padding:12px 0; display:flex; flex-wrap:wrap; gap:10px; align-items:center; border-bottom:1px solid var(--line); }
+  .seg { display:inline-flex; background:var(--soft); border-radius:12px; padding:3px; position:relative; }
+  .seg button { position:relative; z-index:1; height:32px; padding:0 12px; border:0; background:none; border-radius:9px; font:600 13px "Archivo", system-ui; color:var(--muted); cursor:pointer; transition:color 150ms var(--out); }
+  .seg button[aria-pressed="true"] { color:#fff; }
+  .seg .thumb { position:absolute; top:3px; left:0; height:32px; border-radius:9px; background:var(--ink); transition:transform 220ms var(--out), width 220ms var(--out); }
+  input { height:38px; border-radius:11px; border:1px solid var(--line); background:var(--tile); padding:0 12px; font:500 14px "Archivo", system-ui; min-width:200px; }
+  table { width:100%; border-collapse:separate; border-spacing:0 10px; margin-top:8px; }
+  th { text-align:left; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:0 10px; }
+  td { background:var(--tile); padding:16px 10px; vertical-align:middle; }
+  td:first-child { border-radius:12px 0 0 12px; padding-left:16px; width:200px; }
+  td:last-child { border-radius:0 12px 12px 0; }
+  .nm b { font-size:16px; font-weight:750; display:block; }
+  .nm span { color:var(--muted); font-size:12.5px; }
+  .badge { display:inline-block; background:var(--ink); color:#fff; border-radius:12px; padding:6px 14px 8px; font-size:44px; line-height:1; white-space:nowrap; transition:transform 160ms var(--out); }
+  .badge:hover { transform:translateY(-2px) rotate(-1deg); }
+  .badge.w { background:#fff; color:var(--ink); box-shadow:inset 0 0 0 2px var(--ink); }
+  .badge.y { background:var(--accent); color:var(--ink); }
+  .small { font-size:18px; border-radius:6px; padding:3px 7px 4px; }
+  .cell { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+  .f-archivo-x { font-family:"Archivo", system-ui, sans-serif; font-weight:900; font-stretch:125%; letter-spacing:-0.03em; }
+  .f-archivo-c { font-family:"Archivo", system-ui, sans-serif; font-weight:900; font-stretch:62%; letter-spacing:-0.01em; }
+  .f-unbounded { font-family:"Unbounded", system-ui, sans-serif; font-weight:900; letter-spacing:-0.04em; }
+  .f-rubik { font-family:"Rubik", system-ui, sans-serif; font-weight:900; letter-spacing:-0.03em; }
+  .f-anton { font-family:"Anton", system-ui, sans-serif; letter-spacing:0; }
+  .f-familjen { font-family:"Familjen Grotesk", system-ui, sans-serif; font-weight:700; letter-spacing:-0.045em; }
+  .tag { display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--soft); color:var(--muted); margin-top:6px; }
+  .tag.ok { background:#e6f4e1; color:#2f6b1f; } .tag.warn { background:#fff3cf; color:#7a5a00; }
+  @media (max-width:760px){ td:first-child { width:auto; } .badge { font-size:32px; } }
+  @media (prefers-reduced-motion: reduce){ * { transition:none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Name × font</h1>
+  <p class="lead">Is it the name or the font? Every candidate set as a thick badge, the way mini uses its mark. Switch the font, case and style at the top, or type your own name. The hand-drawn "tab" from the logo work used perfect circles for the bowls, which reads as bubbly and generic. These real typefaces show what a sturdier letterform does.</p>
+
+  <div class="bar">
+    <div class="seg" data-group="font">
+      <span class="thumb"></span>
+      <button aria-pressed="true" data-v="f-archivo-x">Archivo Expanded</button>
+      <button aria-pressed="false" data-v="f-archivo-c">Archivo Condensed</button>
+      <button aria-pressed="false" data-v="f-unbounded">Unbounded</button>
+      <button aria-pressed="false" data-v="f-rubik">Rubik</button>
+      <button aria-pressed="false" data-v="f-anton">Anton</button>
+      <button aria-pressed="false" data-v="f-familjen">Familjen</button>
+    </div>
+    <div class="seg" data-group="case">
+      <span class="thumb"></span>
+      <button aria-pressed="true" data-v="lower">lower</button>
+      <button aria-pressed="false" data-v="title">Title</button>
+      <button aria-pressed="false" data-v="upper">UPPER</button>
+    </div>
+    <input id="own" placeholder="Type a name to test…" aria-label="Test your own name">
+  </div>
+
+  <table>
+    <thead><tr><th>Name</th><th>Badges</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</main>
+<script>
+  const NAMES = [
+    ["tab", "Current pick. Three letters, two round bowls.", "Only tiny apps", "ok"],
+    ["enter", "A key on every keyboard. 'Enter the web.'", "No browser found", "ok"],
+    ["return", "A key, and what you do every day.", "No browser found", "ok"],
+    ["escape", "A key, and a feeling. Esc as a short form.", "No browser found", "ok"],
+    ["scroll", "The thing you do most on the web.", "Only a tiny iOS auto-scroll app", "ok"],
+    ["refresh", "Browser word everyone knows. Also: new, clean.", "Only automation commands", "ok"],
+    ["hello", "The most-said word there is. Friendly.", "No browser found", "ok"],
+    ["anyway", "How everyone ends a sentence. Casual, funny.", "No browser found", "ok"],
+    ["later", "'I'll read it later.' Saves tabs for later.", "No browser found", "ok"],
+    ["home", "A key and a place.", "Small homepage apps", "ok"],
+    ["open", "The verb of browsing, plus open source.", "No browser found", "ok"],
+    ["wander", "Not as common, but warm.", "Small-web discovery tools use it", "warn"],
+  ];
+  const state = { font: "f-archivo-x", case: "lower", own: "" };
+  const fmt = s => state.case === "upper" ? s.toUpperCase() : state.case === "title" ? s[0].toUpperCase() + s.slice(1) : s.toLowerCase();
+  const row = ([n, d, c, k]) => `<tr><td class="nm"><b>${fmt(n)}</b><span>${d}</span><br><span class="tag ${k}">${c}</span></td>
+    <td><div class="cell ${state.font}">
+      <span class="badge">${fmt(n)}</span><span class="badge w">${fmt(n)}</span><span class="badge y">${fmt(n)}</span><span class="badge small">${fmt(n)}</span>
+    </div></td></tr>`;
+  const render = () => {
+    const list = state.own.trim() ? [[state.own.trim(), "Your name", "Not checked", ""], ...NAMES] : NAMES;
+    document.getElementById("rows").innerHTML = list.map(row).join("");
+  };
+  const moveThumb = g => { const on = g.querySelector('[aria-pressed="true"]'), th = g.querySelector(".thumb"); th.style.width = on.offsetWidth + "px"; th.style.transform = `translateX(${on.offsetLeft}px)`; };
+  document.querySelectorAll(".seg").forEach(g => {
+    g.querySelectorAll("button").forEach(b => b.onclick = () => {
+      g.querySelectorAll("button").forEach(o => o.setAttribute("aria-pressed", o === b));
+      state[g.dataset.group] = b.dataset.v; moveThumb(g); render();
+    });
+    requestAnimationFrame(() => moveThumb(g));
+  });
+  document.fonts && document.fonts.ready.then(() => document.querySelectorAll(".seg").forEach(moveThumb));
+  document.getElementById("own").oninput = e => { state.own = e.target.value; render(); };
+  render();
+</script>
+</body>
+</html>

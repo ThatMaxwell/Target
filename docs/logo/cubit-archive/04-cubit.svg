@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- CUBIT = cube + bit. A solid cube with one small cube (a bit) taken out of its corner. -->
+  <polygon points="50,10 84.64,30 67.32,40 50,30 32.68,40 15.36,30" fill="#3a3a3a"/>
+  <polygon points="84.64,30 67.32,40 67.32,60 50,70 50,90 84.64,70" fill="#000"/>
+  <polygon points="15.36,30 32.68,40 32.68,60 50,70 50,90 15.36,70" fill="#1a1a1a"/>
+  <!-- inside of the notch -->
+  <polygon points="50,50 67.32,60 50,70 32.68,60" fill="#3a3a3a"/>
+  <polygon points="50,30 32.68,40 32.68,60 50,50" fill="#000"/>
+  <polygon points="50,30 67.32,40 67.32,60 50,50" fill="#1a1a1a"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="800" height="480">
+  <!-- The mark as material (mini-style): a giant tab rising from the bottom of the screen,
+       the wordmark blown up inside it and cropped by the edge. -->
+  <path d="M10 240 V60 A40 40 0 0 1 50 20 H350 A40 40 0 0 1 390 60 V240 Z" fill="#111"/>
+  <g fill="#fff" transform="translate(44 112) scale(1.45)"><path d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z"/><path fill-rule="evenodd" d="M56 63 A37 37 0 1 0 130 63 A37 37 0 1 0 56 63 Z M77 63 A16 16 0 1 0 109 63 A16 16 0 1 0 77 63 Z"/><rect x="110" y="26" width="20" height="74"/><rect x="138" y="0" width="20" height="100"/><path fill-rule="evenodd" d="M141 63 A37 37 0 1 0 215 63 A37 37 0 1 0 141 63 Z M162 63 A16 16 0 1 0 194 63 A16 16 0 1 0 162 63 Z"/></g>
+</svg>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Target logo library</title>
+<style>
+  :root { --bg:#f4f4f2; --tile:#fff; --ink:#111; --muted:#6b6b68; --line:#e2e2de; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:48px 16px 96px; }
+  main { max-width:1120px; margin:0 auto; }
+  h1 { font-size:44px; font-weight:850; letter-spacing:-0.035em; line-height:.95; }
+  h2 { font-size:22px; font-weight:750; letter-spacing:-0.02em; margin:56px 0 16px; display:flex; gap:10px; align-items:baseline; }
+  h2 small { font-size:13px; font-weight:500; color:var(--muted); letter-spacing:0; }
+  p.lead { color:var(--muted); margin:12px 0 8px; max-width:62ch; }
+  nav { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  nav a { font-size:13px; color:var(--ink); text-decoration:none; padding:6px 12px; border-radius:999px; background:#e7e7e3; }
+  nav a:hover { background:#dcdcd7; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
+  .card { background:var(--tile); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .card.wide { grid-column:span 2; }
+  @media (max-width:560px){ .card.wide { grid-column:auto; } }
+  .pair { display:grid; grid-template-columns:1fr 1fr; }
+  .pair div { min-height:150px; display:grid; place-items:center; padding:20px; }
+  .pair .dark { background:#0e0e0e; }
+  .pair .dark img.inv { filter:invert(1); }
+  .pair img { max-width:100%; max-height:110px; }
+  .card:not(.wide) .pair img { width:70%; }
+  .sizes { display:flex; align-items:end; gap:12px; padding:0 14px 12px; min-height:44px; }
+  .meta { padding:12px 14px 14px; border-top:1px solid var(--line); }
+  .meta b { font-weight:650; } .meta i { font-style:normal; color:var(--muted); font-size:12px; margin-left:6px; }
+  .meta span { display:block; color:var(--muted); font-size:13px; }
+</style></head>
+<body><main>
+  <h1>Target<br>logo library</h1>
+  <p class="lead">__COUNT__ concepts, all drawn from the same chunky letters: squarish bowls, heavy stems. No rings, no red. Light and dark side by side; small sizes under the square marks. Concepts, not finals.</p>
+  <nav id="nav"></nav>
+  <div id="out"></div>
+</main>
+<script>
+const SVG = __SVG__;
+const FAMS = __FAMS__;
+const card = ([f, n, d, wide, keep]) => `
+  <section class="card${wide ? " wide" : ""}">
+    <div class="pair"><div><img src="${SVG[f][0]}" alt="${n}"></div><div class="dark"><img src="${SVG[f][1]}" alt=""></div></div>
+    ${wide ? "" : `<div class="sizes"><img src="${SVG[f][0]}" width="48" alt=""><img src="${SVG[f][0]}" width="32" alt=""><img src="${SVG[f][0]}" width="16" alt=""></div>`}
+    <div class="meta"><b>${n}</b><i>${f.slice(0, 2)}</i><span>${d}</span></div>
+  </section>`;
+const id = s => s.toLowerCase().replace(/[^a-z]+/g, "-");
+document.getElementById("nav").innerHTML = FAMS.map(([fam, its]) => `<a href="#${id(fam)}">${fam} · ${its.length}</a>`).join("");
+document.getElementById("out").innerHTML = FAMS.map(([fam, its]) =>
+  `<h2 id="${id(fam)}">${fam}<small>${its.length}</small></h2><div class="grid">${its.map(card).join("")}</div>`).join("");
+</script></body></html>

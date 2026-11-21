@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cubit logo concepts</title>
+<style>
+  :root { --bg: #f4f4f2; --tile: #fff; --ink: #111; --muted: #6b6b68; --line: #e2e2de; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.5 "IBM Plex Sans", system-ui, sans-serif; padding: 48px 16px; }
+  main { max-width: 1040px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; }
+  p.lead { color: var(--muted); margin: 6px 0 36px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .card { background: var(--tile); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; }
+  .pair div { aspect-ratio: 1; display: grid; place-items: center; }
+  .pair .dark { background: #0e0e0e; }
+  .pair .dark img { filter: invert(1); }
+  .pair img { width: 62%; }
+  .meta { padding: 14px 16px 16px; border-top: 1px solid var(--line); }
+  .meta b { font-weight: 600; }
+  .meta span { display: block; color: var(--muted); font-size: 13.5px; }
+  .sizes { display: flex; align-items: end; gap: 14px; padding: 0 16px 16px; }
+  .sizes img { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Cubit: logo concepts</h1>
+  <p class="lead">Concepts, not finals. Each one is shown on light and on dark, with small sizes at the bottom (64, 32, 16 px).</p>
+  <div class="grid" id="grid"></div>
+</main>
+<script>const SVG = {"01-solid.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBTb2xpZCBpc29tZXRyaWMgY3ViZS4gTGlnaHQgZnJvbSB1cHBlciBsZWZ0OiB0b3AgbGlnaHRlc3QsIHJpZ2h0IGRhcmtlc3QuIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNTAsMTAgODQuNjQsMzAgNTAsNTAgMTUuMzYsMzAiIGZpbGw9IiMzYTNhM2EiLz4KICA8cG9seWdvbiBwb2ludHM9IjE1LjM2LDMwIDUwLDUwIDUwLDkwIDE1LjM2LDcwIiBmaWxsPSIjMWExYTFhIi8+CiAgPHBvbHlnb24gcG9pbnRzPSI1MCw1MCA4NC42NCwzMCA4NC42NCw3MCA1MCw5MCIgZmlsbD0iIzAwMCIvPgo8L3N2Zz4K","02-flat.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBPbmUtY29sb3Igc2lsaG91ZXR0ZS4gVGhlIGN1YmUgaXMgY3V0IGJ5IHRocmVlIHRoaW4gbGluZXMsIHNvIGl0IHdvcmtzIGF0IDE2cHggYW5kIGluIG9uZSBpbmsuIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNTAsMTAgODQuNjQsMzAgODQuNjQsNzAgNTAsOTAgMTUuMzYsNzAgMTUuMzYsMzAiIGZpbGw9IiMwMDAiLz4KICA8cGF0aCBkPSJNNTAgNTAgTDE1LjM2IDMwIE01MCA1MCBMODQuNjQgMzAgTTUwIDUwIEw1MCA5MCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIvPgo8L3N2Zz4K","03-line.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBXaXJlZnJhbWU6IHRoZSBjdWJlIGFzIGEgZHJhd24gbGluZS4gTGlnaHRlc3Qgd2VpZ2h0LCBnb29kIGZvciBVSSBpY29ucy4gLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwLDEyIDgyLjksMzEgODIuOSw2OSA1MCw4OCAxNy4xLDY5IDE3LjEsMzEiLz4KICAgIDxwYXRoIGQ9Ik01MCA1MCBMMTcuMSAzMSBNNTAgNTAgTDgyLjkgMzEgTTUwIDUwIEw1MCA4OCIvPgogIDwvZz4KPC9zdmc+Cg==","04-cubit.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBDVUJJVCA9IGN1YmUgKyBiaXQuIEEgc29saWQgY3ViZSB3aXRoIG9uZSBzbWFsbCBjdWJlIChhIGJpdCkgdGFrZW4gb3V0IG9mIGl0cyBjb3JuZXIuIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNTAsMTAgODQuNjQsMzAgNjcuMzIsNDAgNTAsMzAgMzIuNjgsNDAgMTUuMzYsMzAiIGZpbGw9IiMzYTNhM2EiLz4KICA8cG9seWdvbiBwb2ludHM9Ijg0LjY0LDMwIDY3LjMyLDQwIDY3LjMyLDYwIDUwLDcwIDUwLDkwIDg0LjY0LDcwIiBmaWxsPSIjMDAwIi8+CiAgPHBvbHlnb24gcG9pbnRzPSIxNS4zNiwzMCAzMi42OCw0MCAzMi42OCw2MCA1MCw3MCA1MCw5MCAxNS4zNiw3MCIgZmlsbD0iIzFhMWExYSIvPgogIDwhLS0gaW5zaWRlIG9mIHRoZSBub3RjaCAtLT4KICA8cG9seWdvbiBwb2ludHM9IjUwLDUwIDY3LjMyLDYwIDUwLDcwIDMyLjY4LDYwIiBmaWxsPSIjM2EzYTNhIi8+CiAgPHBvbHlnb24gcG9pbnRzPSI1MCwzMCAzMi42OCw0MCAzMi42OCw2MCA1MCw1MCIgZmlsbD0iIzAwMCIvPgogIDxwb2x5Z29uIHBvaW50cz0iNTAsMzAgNjcuMzIsNDAgNjcuMzIsNjAgNTAsNTAiIGZpbGw9IiMxYTFhMWEiLz4KPC9zdmc+Cg==","05-cube-and-bit.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBUaGUgY3ViZSBhbmQgaXRzIGJpdDogYSBiaWcgY3ViZSB3aXRoIGEgc21hbGwgb25lIGJlc2lkZSBpdC4gLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNCAxNCkgc2NhbGUoLjc4KSI+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwLDEwIDg0LjY0LDMwIDUwLDUwIDE1LjM2LDMwIiBmaWxsPSIjM2EzYTNhIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjE1LjM2LDMwIDUwLDUwIDUwLDkwIDE1LjM2LDcwIiBmaWxsPSIjMWExYTFhIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwLDUwIDg0LjY0LDMwIDg0LjY0LDcwIDUwLDkwIiBmaWxsPSIjMDAwIi8+CiAgPC9nPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY4IDYpIHNjYWxlKC4yNikiPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MCwxMCA4NC42NCwzMCA1MCw1MCAxNS4zNiwzMCIgZmlsbD0iIzNhM2EzYSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIxNS4zNiwzMCA1MCw1MCA1MCw5MCAxNS4zNiw3MCIgZmlsbD0iIzFhMWExYSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MCw1MCA4NC42NCwzMCA4NC42NCw3MCA1MCw5MCIgZmlsbD0iIzAwMCIvPgogIDwvZz4KPC9zdmc+Cg==","06-front.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBUaGUgY3ViZSBzZWVuIGhlYWQtb246IGEgYmxhY2sgc3F1YXJlLiBBcyBzdHJhaWdodGZvcndhcmQgYXMgaXQgZ2V0cy4gLS0+CiAgPHJlY3QgeD0iMTYiIHk9IjE2IiB3aWR0aD0iNjgiIGhlaWdodD0iNjgiIHJ4PSI3IiBmaWxsPSIjMDAwIi8+Cjwvc3ZnPgo=","07-startup.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPCEtLSBTdGFydHVwIGFuaW1hdGlvbiBjb25jZXB0IChsb29wcyBmb3IgcHJldmlldykuCiAgICAgICAxLiBUaGUgdGhyZWUgZmFjZXMgc2xpZGUgaW4gZnJvbSB0aGVpciBvd24gZGlyZWN0aW9ucywgc3RhZ2dlcmVkLgogICAgICAgMi4gVGhlIGN1YmUgc2l0cyB3aG9sZSBmb3IgYSBiZWF0LgogICAgICAgMy4gVGhlIGJpdCBsaWZ0cyBzdHJhaWdodCB1cCBvdXQgb2YgdGhlIGNvcm5lciBhbmQgc2V0dGxlczogY3ViZSAtPiBDdWJpdC4gLS0+CiAgPHN0eWxlPgogICAgLnAgeyBhbmltYXRpb24tZHVyYXRpb246IDMuNnM7IGFuaW1hdGlvbi1pdGVyYXRpb24tY291bnQ6IGluZmluaXRlOyBhbmltYXRpb24tZmlsbC1tb2RlOiBib3RoOyB9CiAgICAudG9wICAgeyBhbmltYXRpb24tbmFtZTogdG9wOyB9CiAgICAubGVmdCAgeyBhbmltYXRpb24tbmFtZTogbGVmdDsgfQogICAgLnJpZ2h0IHsgYW5pbWF0aW9uLW5hbWU6IHJpZ2h0OyB9CiAgICAuYml0ICAgeyBhbmltYXRpb24tbmFtZTogYml0OyB9CiAgICBAa2V5ZnJhbWVzIHRvcCAgIHsgMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgwLC0xNHB4KTsgb3BhY2l0eTogMDsgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogY3ViaWMtYmV6aWVyKC4yLC44LC4yLDEpOyB9CiAgICAgICAgICAgICAgICAgICAgICAgMTElIHsgdHJhbnNmb3JtOiBub25lOyBvcGFjaXR5OiAxOyB9IDkwJSB7IG9wYWNpdHk6IDE7IH0gMTAwJSB7IG9wYWNpdHk6IDA7IH0gfQogICAgQGtleWZyYW1lcyBsZWZ0ICB7IDAlLCA0JSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKC0xMnB4LDdweCk7IG9wYWNpdHk6IDA7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllciguMiwuOCwuMiwxKTsgfQogICAgICAgICAgICAgICAgICAgICAgIDE1JSB7IHRyYW5zZm9ybTogbm9uZTsgb3BhY2l0eTogMTsgfSA5MCUgeyBvcGFjaXR5OiAxOyB9IDEwMCUgeyBvcGFjaXR5OiAwOyB9IH0KICAgIEBrZXlmcmFtZXMgcmlnaHQgeyAwJSwgOCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMnB4LDdweCk7IG9wYWNpdHk6IDA7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllciguMiwuOCwuMiwxKTsgfQogICAgICAgICAgICAgICAgICAgICAgIDE5JSB7IHRyYW5zZm9ybTogbm9uZTsgb3BhY2l0eTogMTsgfSA5MCUgeyBvcGFjaXR5OiAxOyB9IDEwMCUgeyBvcGFjaXR5OiAwOyB9IH0KICAgIEBrZXlmcmFtZXMgYml0ICAgeyAwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDAsLTE0cHgpOyBvcGFjaXR5OiAwOyBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBjdWJpYy1iZXppZXIoLjIsLjgsLjIsMSk7IH0KICAgICAgICAgICAgICAgICAgICAgICAxMSUgeyB0cmFuc2Zvcm06IG5vbmU7IG9wYWNpdHk6IDE7IH0KICAgICAgICAgICAgICAgICAgICAgICAzNiUgeyB0cmFuc2Zvcm06IG5vbmU7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllciguMywxLjQsLjUsMSk7IH0KICAgICAgICAgICAgICAgICAgICAgICA0OCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgwLC0xM3B4KTsgfQogICAgICAgICAgICAgICAgICAgICAgIDkwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDAsLTEzcHgpOyBvcGFjaXR5OiAxOyB9IDEwMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgwLC0xM3B4KTsgb3BhY2l0eTogMDsgfSB9CiAgICBAbWVkaWEgKHByZWZlcnMtcmVkdWNlZC1tb3Rpb246IHJlZHVjZSkgeyAucCB7IGFuaW1hdGlvbjogbm9uZTsgfSB9CiAgPC9zdHlsZT4KICA8ZyBjbGFzcz0icCB0b3AiPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MCwxMCA4NC42NCwzMCA2Ny4zMiw0MCA1MCwzMCAzMi42OCw0MCAxNS4zNiwzMCIgZmlsbD0iIzNhM2EzYSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MCw1MCA2Ny4zMiw2MCA1MCw3MCAzMi42OCw2MCIgZmlsbD0iIzNhM2EzYSIvPgogIDwvZz4KICA8ZyBjbGFzcz0icCBsZWZ0Ij4KICAgIDxwb2x5Z29uIHBvaW50cz0iMTUuMzYsMzAgMzIuNjgsNDAgMzIuNjgsNjAgNTAsNzAgNTAsOTAgMTUuMzYsNzAiIGZpbGw9IiMxYTFhMWEiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAsMzAgNjcuMzIsNDAgNjcuMzIsNjAgNTAsNTAiIGZpbGw9IiMxYTFhMWEiLz4KICA8L2c+CiAgPGcgY2xhc3M9InAgcmlnaHQiPgogICAgPHBvbHlnb24gcG9pbnRzPSI4NC42NCwzMCA2Ny4zMiw0MCA2Ny4zMiw2MCA1MCw3MCA1MCw5MCA4NC42NCw3MCIgZmlsbD0iIzAwMCIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MCwzMCAzMi42OCw0MCAzMi42OCw2MCA1MCw1MCIgZmlsbD0iIzAwMCIvPgogIDwvZz4KICA8IS0tIHRoZSBiaXQ6IGZpbGxzIHRoZSBub3RjaCBhdCBmaXJzdCwgc28gdGhlIGN1YmUgbG9va3Mgd2hvbGUgLS0+CiAgPGcgY2xhc3M9InAgYml0Ij4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAsMzAgNjcuMzIsNDAgNTAsNTAgMzIuNjgsNDAiIGZpbGw9IiMzYTNhM2EiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iMzIuNjgsNDAgNTAsNTAgNTAsNzAgMzIuNjgsNjAiIGZpbGw9IiMxYTFhMWEiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAsNTAgNjcuMzIsNDAgNjcuMzIsNjAgNTAsNzAiIGZpbGw9IiMwMDAiLz4KICA8L2c+Cjwvc3ZnPgo=",};</script>
+<script>
+  const items = [
+    ["01-solid.svg", "Solid cube", "Three shaded faces. The plain answer: it's a cube."],
+    ["02-flat.svg", "Flat cube", "One ink, cut by three thin lines. Survives 16 px and printing in one color."],
+    ["03-line.svg", "Line cube", "The cube drawn as a line. Lightest; fits next to UI icons."],
+    ["04-cubit.svg", "Cubit", "Cube + bit: one small cube taken out of the corner. The name is in the shape."],
+    ["05-cube-and-bit.svg", "Cube and bit", "The bit sits beside the cube instead of missing from it."],
+    ["06-front.svg", "Front-on", "The cube seen straight from the front: a black square."],
+    ["07-startup.svg", "Startup animation", "Faces slide in, the cube holds, then the bit lifts out of the corner. Loops here for preview."],
+  ];
+  document.getElementById("grid").innerHTML = items.map(([f, n, d]) => `
+    <section class="card">
+      <div class="pair"><div><img src="${SVG[f]}" alt="${n}"></div><div class="dark"><img src="${SVG[f]}" alt=""></div></div>
+      <div class="sizes"><img src="${SVG[f]}" width="64" alt=""><img src="${SVG[f]}" width="32" alt=""><img src="${SVG[f]}" width="16" alt=""></div>
+      <div class="meta"><b>${n}</b><span>${d}</span></div>
+    </section>`).join("");
+</script>
+</body>
+</html>

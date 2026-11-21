@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- One-color silhouette. The cube is cut by three thin lines, so it works at 16px and in one ink. -->
+  <polygon points="50,10 84.64,30 84.64,70 50,90 15.36,70 15.36,30" fill="#000"/>
+  <path d="M50 50 L15.36 30 M50 50 L84.64 30 M50 50 L50 90" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
+</svg>

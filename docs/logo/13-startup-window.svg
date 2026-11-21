@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- Startup, round 2 (loops for preview):
+       1. the window body rises from the bottom
+       2. the tab pops up out of its top edge, with a little overshoot
+       3. the t lifts into place. -->
+  <style>
+    .a { animation-duration: 3.4s; animation-iteration-count: infinite; animation-fill-mode: both; }
+    .body { animation-name: body; transform-origin: 50px 88px; }
+    .tab  { animation-name: tab; }
+    .t    { animation-name: t; }
+    @keyframes body { 0% { transform: scaleY(0); animation-timing-function: cubic-bezier(.2,.8,.2,1); } 16% { transform: none; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes tab  { 0%, 13% { transform: translateY(18px); opacity: 0; } 14% { transform: translateY(18px); opacity: 1; animation-timing-function: cubic-bezier(.3,1.5,.5,1); } 28% { transform: none; opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes t    { 0%, 24% { transform: translateY(12px); opacity: 0; animation-timing-function: cubic-bezier(.2,.8,.2,1); } 36% { transform: none; opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .a { animation: none; } }
+  </style>
+  <path class="a tab" d="M8 44 V24 A10 10 0 0 1 18 14 H40 A10 10 0 0 1 50 24 V44 Z" fill="#111"/>
+  <rect class="a body" x="8" y="30" width="84" height="58" rx="12" fill="#111"/>
+  <g class="a t"><path transform="translate(18 38) scale(.44)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff"/></g>
+</svg>

@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- Bars at maximum weight: almost a plus, the gap keeps it a sight. -->
+  <g transform="translate(0 0) scale(1)" fill="#111"><rect x="39.0" y="6" width="22" height="30" rx="3"/><rect x="39.0" y="64" width="22" height="30" rx="3"/><rect x="6" y="39.0" width="30" height="22" rx="3"/><rect x="64" y="39.0" width="30" height="22" rx="3"/></g>
+</svg>

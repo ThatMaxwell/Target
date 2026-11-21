@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- Three bars: a list of open tabs, the current one on top. -->
+  <rect x="10" y="18" width="80" height="18" rx="9" fill="#111"/><rect x="10" y="42" width="58" height="18" rx="9" fill="#9a9a96"/><rect x="10" y="66" width="38" height="18" rx="9" fill="#9a9a96"/>
+</svg>

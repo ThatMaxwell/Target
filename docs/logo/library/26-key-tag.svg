@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="240" height="200">
+  <!-- An arrow-shaped tag (a pull-tab, a label) with the t in it. -->
+  <path d="M8 22 H76 Q80 22 83 25 L106 46 Q110 50 106 54 L83 75 Q80 78 76 78 H8 Z" fill="#111"/><path transform="translate(24 26) scale(0.48)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff" />
+</svg>

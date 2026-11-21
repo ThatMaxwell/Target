@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70" width="440" height="140">
+  <!-- A strip of three; ours is the black one. -->
+  <path d="M150 62 V36 A12 12 0 0 1 162 24 H204 A12 12 0 0 1 216 36 V62 Z" fill="none" stroke="#111" stroke-width="3"/><path d="M80 62 V36 A12 12 0 0 1 92 24 H134 A12 12 0 0 1 146 36 V62 Z" fill="none" stroke="#111" stroke-width="3"/><path d="M6 62 V36 A12 12 0 0 1 18 24 H64 A12 12 0 0 1 76 36 V62 Z" fill="#111"/><path transform="translate(20 28) scale(0.3)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff" /><rect x="0" y="60" width="220" height="4" fill="#111"/>
+</svg>

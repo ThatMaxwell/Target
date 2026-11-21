@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tab logo concepts</title>
+<style>
+  :root { --bg:#f4f4f2; --tile:#fff; --ink:#111; --muted:#6b6b68; --line:#e2e2de; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:48px 16px; }
+  main { max-width:1040px; margin:0 auto; }
+  h1 { font-size:34px; font-weight:800; letter-spacing:-0.03em; line-height:1; }
+  h2 { font-size:22px; font-weight:750; letter-spacing:-0.02em; margin-top:56px; }
+  p.lead { color:var(--muted); margin:10px 0 24px; max-width:60ch; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card { background:var(--tile); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .card.wide { grid-column:1/-1; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; }
+  .pair div { aspect-ratio:1; display:grid; place-items:center; }
+  .wide .pair div { aspect-ratio:auto; padding:40px 24px; }
+  .pair .dark { background:#0e0e0e; }
+  .pair .dark img.inv { filter:invert(1); }
+  .pair img { width:62%; max-width:100%; }
+  .wide .pair img { width:90%; }
+  .sizes { display:flex; align-items:end; gap:14px; padding:0 16px 16px; }
+  .meta { padding:14px 16px 16px; border-top:1px solid var(--line); }
+  .meta b { font-weight:650; } .meta span { display:block; color:var(--muted); font-size:13.5px; }
+  @media (max-width:640px){ .wide .pair { grid-template-columns:1fr; } }
+</style></head>
+<body><main>
+  <h1>Tab: logo concepts</h1>
+  <p class="lead">Concepts, not finals. Each shown on light and dark, plus 64, 32 and 16 px for the marks.</p>
+  <div id="out"></div>
+</main>
+<script>
+const SVG = __SVG__;
+const SECTIONS = __SECTIONS__;
+const card = ([f, n, d, wide, keep]) => `
+  <section class="card${wide ? " wide" : ""}">
+    <div class="pair"><div><img src="${SVG[f]}" alt="${n}"></div><div class="dark"><img class="${keep ? "" : "inv"}" src="${SVG[f]}" alt=""></div></div>
+    ${wide ? "" : `<div class="sizes"><img src="${SVG[f]}" width="64" alt=""><img src="${SVG[f]}" width="32" alt=""><img src="${SVG[f]}" width="16" alt=""></div>`}
+    <div class="meta"><b>${n}</b><span>${d}</span></div>
+  </section>`;
+document.getElementById("out").innerHTML = SECTIONS.map(([title, lead, items]) =>
+  `<h2>${title}</h2><p class="lead">${lead}</p><div class="grid">${items.map(card).join("")}</div>`).join("");
+</script></body></html>

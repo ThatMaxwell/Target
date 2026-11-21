@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- The wide tab (08) shrunk onto a tile, sitting on its strip. -->
+  <clipPath id="c"><rect width="100" height="100" rx="22"/></clipPath>
+  <g clip-path="url(#c)"><rect width="100" height="100" fill="#111"/>
+  <g transform="translate(4 36.4) scale(.4)">
+    <rect x="-20" y="83" width="280" height="4" fill="#fff"/>
+    <path d="M14 84 A10 10 0 0 0 24 74 V40 A18 18 0 0 1 42 22 H198 A18 18 0 0 1 216 40 V74 A10 10 0 0 0 226 84 Z" fill="#fff"/>
+    <g fill="#111" transform="translate(40 30) scale(.42)"><path d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z"/><path fill-rule="evenodd" d="M56 63 A37 37 0 1 0 130 63 A37 37 0 1 0 56 63 Z M77 63 A16 16 0 1 0 109 63 A16 16 0 1 0 77 63 Z"/><rect x="110" y="26" width="20" height="74"/><rect x="138" y="0" width="20" height="100"/><path fill-rule="evenodd" d="M141 63 A37 37 0 1 0 215 63 A37 37 0 1 0 141 63 Z M162 63 A16 16 0 1 0 194 63 A16 16 0 1 0 162 63 Z"/></g>
+    <path d="M188 46 L200 58 M200 46 L188 58" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+  </g></g>
+</svg>

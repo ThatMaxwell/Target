@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100" width="480" height="200">
+  <!-- A wide tab with just the t and the close mark. A tab with nothing in it but us. -->
+  <rect x="0" y="83" width="240" height="3" fill="#111"/><path d="M14 84 A10 10 0 0 0 24 74 V40 A18 18 0 0 1 42 22 H198 A18 18 0 0 1 216 40 V74 A10 10 0 0 0 226 84 Z" fill="#111"/><path transform="translate(42 30) scale(0.46)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff" /><path d="M186 45 L200 59 M200 45 L186 59" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+</svg>

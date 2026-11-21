@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Target UI components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f4f4f2; --surface:#fff; --ink:#111; --on-ink:#fff; --muted:#6b6b68; --line:#e2e2de; --soft:#ebebe7; --soft-2:#dcdcd7; --accent:#FFD500; --danger:#d93a1e;
+    --r-s:8px; --r-m:12px; --r-l:20px;
+                       
+    --press:110ms; --fast:150ms; --base:220ms; --slow:320ms;
+    --out:cubic-bezier(.2,.8,.2,1); --spring:ease-out; --in:cubic-bezier(.5,0,.75,0);
+    --font:"Archivo", system-ui, sans-serif;
+  }
+  [data-theme="dark"] { --bg:#0d0d0d; --surface:#171717; --ink:#f2f2f0; --on-ink:#111; --muted:#8d8d88; --line:#2a2a2a; --soft:#222; --soft-2:#2e2e2e; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font:15px/1.45 var(--font); padding:40px 16px 140px; transition:background var(--base) var(--out), color var(--base) var(--out); }
+  main { max-width:1120px; margin:0 auto; }
+  button { font:inherit; color:inherit; border:0; background:none; cursor:pointer; }
+  button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  svg.i { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+  .press { transition:transform var(--press) var(--out); } .press:active { transform:scale(.96); }
+
+  header.top { display:flex; justify-content:space-between; align-items:end; gap:16px; flex-wrap:wrap; }
+  h1 { font-weight:900; font-stretch:112%; font-size:clamp(40px,7vw,72px); letter-spacing:-0.04em; line-height:.9; }
+  .lead { color:var(--muted); max-width:58ch; margin-top:12px; }
+  h2 { font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:60px 0 14px; display:flex; justify-content:space-between; gap:12px; }
+  h2 em { font-style:normal; font-weight:600; letter-spacing:0; text-transform:none; }
+  .stage { padding:8px 0; }
+  .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+  .note { color:var(--muted); font-size:13px; margin-top:12px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
+
+  /* reveal on scroll */
+  .reveal { opacity:0; transform:translateY(16px); transition:opacity var(--slow) var(--out), transform var(--slow) var(--out); }
+  .reveal.in { opacity:1; transform:none; }
+
+  /* badge: the thick logo as a control */
+  .badge { display:inline-grid; place-items:center; background:var(--ink); color:var(--on-ink); border-radius:7px; padding:5px 8px; }
+  .badge svg { height:18px; width:auto; display:block; fill:currentColor; }
+  .badge.lg { border-radius:12px; padding:10px 14px; } .badge.lg svg { height:40px; }
+  .badge.accent { background:var(--accent); color:#111; }
+  .chip-menu { display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:var(--on-ink); border-radius:14px; padding:8px 14px 8px 8px; font-weight:600; position:relative; }
+  .chip-menu .badge { background:var(--on-ink); color:var(--ink); }
+  .caret { width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid currentColor; margin-left:2px; transition:transform var(--base) var(--out); }
+  [aria-expanded="true"] .caret { transform:rotate(180deg); }
+
+  /* popover menu (opens from its button) */
+  .pop { position:absolute; top:calc(100% + 8px); left:0; z-index:5; width:240px; background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:14px; padding:6px; box-shadow:0 1px 2px rgba(0,0,0,0.06);
+         transform-origin:top left; transform:scale(.94) translateY(-4px); opacity:0; pointer-events:none; transition:transform var(--fast) var(--out), opacity var(--fast) var(--out); text-align:left; }
+  .pop.open { transform:none; opacity:1; pointer-events:auto; }
+  .pop button, .menu button { width:100%; display:flex; align-items:center; gap:10px; height:34px; padding:0 10px; border-radius:8px; font-size:14px; font-weight:500; text-align:left; }
+  .pop button:hover, .menu button:hover { background:var(--soft); }
+  .pop .dot, .menu .dot { width:10px; height:10px; border-radius:3px; background:var(--ink); }
+  .pop hr, .menu hr { border:0; border-top:1px solid var(--line); margin:6px 4px; }
+
+  /* window */
+  .window { background:var(--soft); border-radius:var(--r-l); border:1px solid var(--line); position:relative; }
+  .strip { display:flex; align-items:end; padding:10px 12px 0; min-height:48px; }
+  .strip .chip-menu { margin:0 10px 8px 0; padding:5px 10px 5px 5px; border-radius:10px; font-size:13px; flex:none; }
+  .tabs { display:flex; align-items:end; min-width:0; flex:1; }
+  .tab { --slop-allow: layout-prop-animation; --tb:transparent; position:relative; display:flex; align-items:center; gap:8px; width:200px; flex:0 1 200px; min-width:0; height:38px; padding:0 6px 0 12px; border-radius:var(--r-m) var(--r-m) 0 0; background:var(--tb); font-size:13.5px; font-weight:550; color:var(--muted); cursor:default; overflow:visible;
+         transition:background var(--fast) var(--out), color var(--fast) var(--out), flex-basis var(--base) var(--out), opacity var(--fast) var(--out), padding var(--base) var(--out); }
+  .tab:hover:not(.on) { --tb:var(--soft-2); }
+  .tab.on { --tb:var(--surface); color:var(--ink); z-index:1; }
+  .tab.on::before, .tab.on::after { content:""; position:absolute; bottom:0; width:12px; height:12px; }
+  .tab.on::before { left:-12px; background:radial-gradient(circle at 0 0, transparent 11.5px, var(--tb) 12px); }
+  .tab.on::after { right:-12px; background:radial-gradient(circle at 100% 0, transparent 11.5px, var(--tb) 12px); }
+  .tab.entering, .tab.leaving { flex-basis:0; opacity:0; padding:0; }
+  .tab .fav { width:16px; height:16px; border-radius:4px; background:var(--ink); flex:none; }
+  .tab .fav.y { background:var(--accent); } .tab .fav.g { background:var(--muted); }
+  .tab .ttl { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tab .x { width:22px; height:22px; border-radius:6px; display:grid; place-items:center; opacity:0; flex:none; transition:opacity var(--fast) var(--out), background var(--fast) var(--out); }
+  .tab:hover .x, .tab.on .x { opacity:.6; } .tab .x:hover { background:var(--soft); opacity:1; }
+  .tab .x svg { width:12px; height:12px; }
+  .tab .load { position:absolute; left:10px; right:10px; bottom:0; height:2px; background:var(--ink); transform-origin:left; transform:scaleX(0); opacity:0; }
+  .tab.loading .load { animation:load 900ms var(--out) forwards; }
+  @keyframes load { 0% { transform:scaleX(0); opacity:1; } 85% { transform:scaleX(1); opacity:1; } 100% { transform:scaleX(1); opacity:0; } }
+  .newtab { width:30px; height:30px; border-radius:8px; display:grid; place-items:center; margin:0 0 4px 6px; color:var(--muted); flex:none; transition:background var(--fast) var(--out), transform var(--press) var(--out); }
+  .newtab:hover { background:var(--soft-2); color:var(--ink); } .newtab:active { transform:scale(.9) rotate(90deg); }
+  .toolbar { display:flex; align-items:center; gap:6px; background:var(--surface); padding:8px 10px; position:relative; z-index:1; }
+  .ib { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; color:var(--muted); position:relative; transition:background var(--fast) var(--out), color var(--fast) var(--out), transform var(--press) var(--out); }
+  .ib:hover { background:var(--soft); color:var(--ink); } .ib:active { transform:scale(.92); }
+  .ib.on { background:var(--ink); color:var(--on-ink); }
+  .ib.spin svg { animation:spin 600ms var(--out); } @keyframes spin { to { transform:rotate(360deg); } }
+  .addr { flex:1; display:flex; align-items:center; gap:10px; height:36px; padding:0 6px 0 14px; border-radius:999px; background:var(--soft); font-size:14px; min-width:0; transition:background var(--fast) var(--out), box-shadow var(--fast) var(--out); cursor:text; }
+  .addr:hover { background:var(--soft-2); }
+  .addr b { font-weight:650; } .addr .url { color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; }
+  .page { background:var(--surface); min-height:220px; border-top:1px solid var(--line); border-radius:0 0 var(--r-l) var(--r-l); padding:28px; position:relative; overflow:hidden; }
+  .skel { display:grid; gap:10px; max-width:520px; }
+  .skel i { display:block; height:12px; border-radius:6px; background:var(--soft); }
+  .skel i:nth-child(1) { width:60%; height:22px; } .skel i:nth-child(2) { width:92%; } .skel i:nth-child(3) { width:84%; } .skel i:nth-child(4) { width:70%; }
+
+  /* permission sheet: drops from the address bar */
+  .sheet { position:absolute; top:52px; left:120px; width:320px; z-index:3; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 1px 2px rgba(0,0,0,0.06);
+           transform-origin:top left; transform:translateY(-8px) scale(.96); opacity:0; pointer-events:none; transition:transform var(--base) var(--spring), opacity var(--fast) var(--out); }
+  .sheet.open { transform:none; opacity:1; pointer-events:auto; }
+  .sheet b { font-weight:700; } .sheet p { color:var(--muted); font-size:13.5px; margin:4px 0 14px; }
+  .sheet .row { gap:8px; }
+
+  /* new tab page */
+  .ntp { background:var(--surface); padding:20px 20px 28px; }
+  .hero { background:var(--ink); color:var(--on-ink); border-radius:0 0 28px 28px; aspect-ratio:3.2 / 1; min-height:160px; overflow:hidden; position:relative; }
+  .hero svg { position:absolute; left:9%; width:68%; bottom:12%; fill:currentColor; transform:translateY(40%); transition:transform 700ms var(--out); }
+  .in .hero svg { transform:none; }
+  .grabber { width:56px; height:5px; border-radius:3px; background:var(--soft-2); margin:10px auto 26px; }
+  .ntp h3 { font-weight:900; font-stretch:110%; font-size:40px; letter-spacing:-0.035em; line-height:.95; }
+  .search { margin-top:16px; display:flex; align-items:center; gap:10px; height:52px; padding:0 8px 0 18px; border-radius:16px; background:var(--soft); font-size:16px; color:var(--muted); transition:box-shadow var(--fast) var(--out), background var(--fast) var(--out); }
+  .search:hover { box-shadow:0 0 0 2px var(--ink); background:var(--surface); }
+  .search .btn { margin-left:auto; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:16px; }
+  .tile { background:var(--soft); border-radius:14px; padding:14px; font-weight:650; font-size:14px; transition:transform var(--fast) var(--out), background var(--fast) var(--out); }
+  .tile:hover { transform:translateY(-3px); background:var(--soft-2); } .tile:active { transform:translateY(-1px) scale(.98); }
+  .tile i { display:block; width:28px; height:28px; border-radius:8px; background:var(--ink); margin-bottom:22px; transition:transform var(--base) var(--spring); }
+  .tile:hover i { transform:rotate(-8deg) scale(1.08); }
+  .stagger > * { opacity:0; transform:translateY(10px); transition:opacity var(--base) var(--out), transform var(--base) var(--out); }
+  .in .stagger > * { opacity:1; transform:none; }
+  .in .stagger > *:nth-child(2) { transition-delay:40ms; } .in .stagger > *:nth-child(3) { transition-delay:80ms; } .in .stagger > *:nth-child(4) { transition-delay:120ms; } .in .stagger > *:nth-child(5) { transition-delay:160ms; } .in .stagger > *:nth-child(6) { transition-delay:200ms; }
+
+  /* buttons and controls */
+  .btn { height:40px; padding:0 16px; border-radius:11px; font-weight:650; display:inline-flex; align-items:center; gap:8px; transition:transform var(--press) var(--out), background var(--fast) var(--out), box-shadow var(--fast) var(--out); }
+  .btn:active { transform:scale(.96); }
+  .btn.primary { background:var(--ink); color:var(--on-ink); } .btn.primary:hover { box-shadow:0 1px 2px rgba(0,0,0,0.06); }
+  .btn.secondary { background:var(--soft); } .btn.secondary:hover { background:var(--soft-2); }
+  .btn.ghost:hover { background:var(--soft); }
+  .btn.accent { background:var(--accent); color:#111; } .btn.accent:hover { box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .btn.sm { height:32px; padding:0 12px; border-radius:9px; font-size:13.5px; }
+  .btn .arr { transition:transform var(--fast) var(--out); } .btn:hover .arr { transform:translateX(3px); }
+  .kbd { display:inline-grid; place-items:center; min-width:22px; height:22px; padding:0 6px; border-radius:6px; background:var(--surface); border:1px solid var(--line); border-bottom-width:2px; font-size:11.5px; font-weight:650; color:var(--muted); }
+  .switch { width:44px; height:26px; border-radius:999px; background:var(--soft-2); position:relative; transition:background var(--base) var(--out); flex:none; }
+  .switch::after { content:""; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:10px; background:var(--surface); box-shadow:0 1px 2px rgba(0,0,0,.2); transition:transform var(--base) var(--spring); transform-origin:left center; }
+  .switch:active::after { transform:scaleX(1.25); }
+  .switch[aria-checked="true"] { background:var(--ink); }
+  .switch[aria-checked="true"]::after { transform:translateX(18px); }
+  .switch[aria-checked="true"]:active::after { transform:translateX(13px) scaleX(1.25); }
+  /* segmented + icon groups with a sliding thumb */
+  .seg { display:inline-flex; background:var(--soft); border-radius:12px; padding:3px; position:relative; }
+  .seg button { position:relative; z-index:1; height:32px; padding:0 14px; border-radius:9px; font-weight:600; font-size:13.5px; color:var(--muted); transition:color var(--fast) var(--out); }
+  .seg button[aria-pressed="true"] { color:var(--on-ink); }
+  .thumb { position:absolute; top:3px; left:0; height:32px; border-radius:9px; background:var(--ink); transition:transform var(--base) var(--out), width var(--base) var(--out); }
+  .icons { display:inline-flex; gap:8px; position:relative; }
+  .icons .ib { width:44px; height:44px; border-radius:12px; background:var(--soft); z-index:1; }
+  .icons .ib[aria-pressed="true"] { color:var(--on-ink); background:transparent; }
+  .icons .thumb { top:0; height:44px; border-radius:12px; }
+  .check { display:inline-flex; align-items:center; gap:10px; font-weight:550; }
+  .check i { width:22px; height:22px; border-radius:7px; border:2px solid var(--soft-2); display:grid; place-items:center; transition:background var(--fast) var(--out), border-color var(--fast) var(--out); }
+  .check i svg { width:14px; height:14px; stroke:var(--on-ink); stroke-width:3; fill:none; stroke-dasharray:20; stroke-dashoffset:20; transition:stroke-dashoffset var(--base) var(--out); }
+  .check[aria-checked="true"] i { background:var(--ink); border-color:var(--ink); }
+  .check[aria-checked="true"] i svg { stroke-dashoffset:0; }
+
+  /* badges */
+  .badge.wiggle:hover { animation:wiggle 420ms var(--out); }
+  @keyframes wiggle { 30% { transform:rotate(-4deg) scale(1.04); } 60% { transform:rotate(2deg); } }
+
+  /* menu + toast + command palette */
+  .menu { width:260px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:6px; box-shadow:0 10px 30px -12px rgba(0,0,0,.25); }
+  .menu button .kbd { margin-left:auto; }
+  .menu .danger { color:var(--danger); }
+  .toasts { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); display:grid; gap:8px; justify-items:center; z-index:50; pointer-events:none; }
+  .toast { display:inline-flex; align-items:center; gap:14px; background:var(--ink); color:var(--on-ink); padding:8px 8px 8px 16px; border-radius:999px; font-weight:550; font-size:14px; pointer-events:auto;
+           animation:toast-in var(--slow) var(--spring) both; box-shadow:0 1px 2px rgba(0,0,0,0.06); }
+  .toast.out { animation:toast-out var(--fast) var(--in) both; }
+  .toast .btn { height:30px; border-radius:999px; background:var(--on-ink); color:var(--ink); font-size:13px; }
+  @keyframes toast-in { from { opacity:0; transform:translateY(20px) scale(.9); } }
+  @keyframes toast-out { to { opacity:0; transform:translateY(10px) scale(.96); } }
+  .scrim { position:fixed; inset:0; background:rgba(0,0,0,.28); backdrop-filter:blur(2px); z-index:40; opacity:0; pointer-events:none; transition:opacity var(--base) var(--out); display:grid; place-items:start center; padding-top:14vh; }
+  .scrim.open { opacity:1; pointer-events:auto; }
+  .cmd { width:min(560px, calc(100vw - 32px)); background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,0.06); transform:scale(.96) translateY(-8px); transition:transform var(--base) var(--spring); }
+  .scrim.open .cmd { transform:none; }
+  .cmd .in { display:flex; align-items:center; gap:12px; padding:14px 16px; font-size:17px; border-bottom:1px solid var(--line); }
+  .cmd input { flex:1; border:0; background:none; font:inherit; color:inherit; outline:none; }
+  .cmd .res { padding:6px; position:relative; }
+  .cmd .hl { position:absolute; left:6px; right:6px; top:6px; height:40px; border-radius:10px; background:var(--soft); transition:transform var(--fast) var(--out); }
+  .cmd .res div { position:relative; display:flex; align-items:center; gap:12px; height:40px; padding:0 10px; border-radius:10px; font-size:14px; }
+  .cmd .res small { margin-left:auto; color:var(--muted); }
+  .cmd .res .fv { width:16px; height:16px; border-radius:4px; background:var(--muted); }
+  .cmd .foot { display:flex; gap:14px; padding:10px 16px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; }
+
+  /* sidebar take */
+  .side { display:grid; grid-template-columns:240px 1fr; background:var(--soft); border-radius:var(--r-l); border:1px solid var(--line); overflow:hidden; min-height:380px; }
+  .side nav { padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .pins { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .pins button { aspect-ratio:1; border-radius:10px; background:var(--surface); display:grid; place-items:center; transition:transform var(--fast) var(--out); }
+  .pins button:hover { transform:translateY(-2px); }
+  .pins i { width:16px; height:16px; border-radius:4px; background:var(--ink); }
+  .vt { position:relative; display:grid; gap:2px; }
+  .vt .thumb { top:0; left:0; width:100%; height:36px; border-radius:10px; background:var(--surface); box-shadow:0 1px 2px rgba(0,0,0,.08); }
+  .vt button { position:relative; z-index:1; display:flex; align-items:center; gap:10px; height:36px; padding:0 10px; border-radius:10px; font-size:13.5px; font-weight:550; color:var(--muted); text-align:left; transition:color var(--fast) var(--out); }
+  .vt button[aria-pressed="true"] { color:var(--ink); }
+  .vt button i { width:14px; height:14px; border-radius:4px; background:var(--ink); flex:none; }
+  .vt .grp { font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:10px 10px 4px; }
+  .side .content { background:var(--surface); margin:10px 10px 10px 0; border-radius:14px; padding:28px; }
+
+  /* downloads */
+  .dl { display:grid; gap:8px; }
+  .dli { display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; background:var(--soft); }
+  .dli .ic { width:36px; height:36px; border-radius:9px; background:var(--ink); color:var(--on-ink); display:grid; place-items:center; flex:none; transition:background var(--base) var(--out); }
+  .dli .meta { flex:1; min-width:0; } .dli b { font-weight:650; font-size:14px; display:block; } .dli span { color:var(--muted); font-size:12.5px; }
+  .bar { height:4px; border-radius:2px; background:var(--soft-2); overflow:hidden; margin-top:6px; }
+  .bar i { display:block; height:100%; background:var(--ink); transform-origin:left; transform:scaleX(var(--p, 0)); transition:transform 300ms linear; }
+  .dli.done .ic { background:#2f6b1f; } .dli.done .bar { opacity:0; transition:opacity var(--base) var(--out); }
+
+  /* error page */
+  .err { display:grid; grid-template-columns:auto 1fr; gap:32px; align-items:center; }
+  .err svg.wall { width:150px; height:150px; }
+  .err h3 { font-weight:900; font-stretch:110%; font-size:38px; letter-spacing:-0.035em; line-height:.95; }
+  .err p { color:var(--muted); margin:10px 0 18px; max-width:42ch; }
+  @media (max-width:640px) { .err { grid-template-columns:1fr; } .side { grid-template-columns:1fr; } .side .content { margin:0 10px 10px; } .sheet { left:12px; } }
+
+  /* overview */
+  .overview { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+  .card { border-radius:14px; background:var(--soft); border:2px solid transparent; transition:transform var(--fast) var(--out), border-color var(--fast) var(--out); cursor:pointer; }
+  .card:hover { transform:translateY(-3px); }
+  .card.on { border-color:transparent; }
+  .card .thumbn { border-radius:12px 12px 0 0; height:92px; background:linear-gradient(var(--soft-2), var(--soft-2)) 12px 12px / 60% 10px no-repeat, linear-gradient(var(--soft-2), var(--soft-2)) 12px 30px / 80% 8px no-repeat, var(--surface); }
+  .card .lbl { display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:13px; font-weight:600; }
+  .card .lbl i { width:12px; height:12px; border-radius:3px; background:var(--ink); }
+
+  /* settings */
+  .set { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--line); }
+  .set:last-child { border:0; }
+  .set b { font-weight:650; display:block; } .set span { color:var(--muted); font-size:13.5px; }
+
+  /* motion spec table */
+  .spec { width:100%; border-collapse:collapse; font-size:14px; }
+  .spec td, .spec th { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); }
+  .spec th { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .spec code { font:600 12.5px ui-monospace, monospace; background:var(--soft); padding:2px 6px; border-radius:5px; }
+  .demo { width:26px; height:26px; border-radius:7px; background:var(--ink); cursor:pointer; }
+
+
+  /* lock-on: focus brackets snap onto the thing you're about to act on */
+  .lock { position:relative; }
+  .lock::after { content:""; position:absolute; inset:-7px; pointer-events:none; opacity:0; transform:scale(1.08); --c:var(--ink); --l:14px; --w:3px;
+    background:
+      linear-gradient(var(--c),var(--c)) top left / var(--l) var(--w), linear-gradient(var(--c),var(--c)) top left / var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) top right / var(--l) var(--w), linear-gradient(var(--c),var(--c)) top right / var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) bottom left / var(--l) var(--w), linear-gradient(var(--c),var(--c)) bottom left / var(--w) var(--l),
+      linear-gradient(var(--c),var(--c)) bottom right / var(--l) var(--w), linear-gradient(var(--c),var(--c)) bottom right / var(--w) var(--l);
+    background-repeat:no-repeat; transition:opacity var(--fast) var(--out), transform var(--fast) var(--out); }
+  .lock:hover::after, .lock:focus-visible::after, .lock.on::after { opacity:1; transform:none; }
+  .hero.lock::after { inset:18px; --l:34px; --w:7px; --c:var(--on-ink); transition-delay:0ms; }
+  .in .hero.lock::after { opacity:1; transform:none; transition:opacity var(--base) var(--out) 650ms, transform var(--slow) var(--spring) 650ms; }
+  .hl.lock::after { inset:-3px; --l:10px; --w:2px; }
+  .err .miss { animation:miss 2.4s var(--out) infinite; }
+  @keyframes miss { 0%, 20% { transform:translate(0,0); } 45% { transform:translate(14px,-10px); } 70% { transform:translate(-12px,9px); } 90%, 100% { transform:translate(0,0); } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition:none !important; animation:none !important; } .reveal, .stagger > * { opacity:1 !important; transform:none !important; } }
+</style>
+<style id="gesso-text-wrap">h1,h2,h3{text-wrap:balance}p,li,figcaption,blockquote{text-wrap:pretty}</style>
+<style id="gesso-font-smoothing">html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wm" viewBox="-2 0 416 134"><g transform="translate(0 0) scale(1)"><g transform="translate(0 0)"><path fill="currentColor" d="M8 4 H32 V26 H50 V46 H32 V68 Q32 76 40 76 H52 V100 H38 Q8 100 8 70 V46 H0 V26 H8 Z"/></g><g transform="translate(58 0)"><path fill="currentColor" fill-rule="evenodd" d="M30 26 H40 A30 30 0 0 1 70 56 V70 A30 30 0 0 1 40 100 H30 A30 30 0 0 1 0 70 V56 A30 30 0 0 1 30 26 Z M34 48 H36 A10 10 0 0 1 46 58 V68 A10 10 0 0 1 36 78 H34 A10 10 0 0 1 24 68 V58 A10 10 0 0 1 34 48 Z"/><rect fill="currentColor" x="50" y="26" width="24" height="74"/></g><g transform="translate(138 0)"><path fill="currentColor" d="M0 26 H24 V36 Q30 26 46 26 H58 V50 H46 Q24 50 24 70 V100 H0 Z"/></g><g transform="translate(202 0)"><path fill="currentColor" fill-rule="evenodd" d="M30 26 H40 A30 30 0 0 1 70 56 V66 A30 30 0 0 1 40 96 H30 A30 30 0 0 1 0 66 V56 A30 30 0 0 1 30 26 Z M34 46 H36 A10 10 0 0 1 46 56 V64 A10 10 0 0 1 36 74 H34 A10 10 0 0 1 24 64 V56 A10 10 0 0 1 34 46 Z"/><path fill="currentColor" d="M50 26 H74 V104 Q74 130 46 130 H6 V110 H44 Q50 110 50 104 Z"/></g><g transform="translate(282 0)"><mask id="e20" maskUnits="userSpaceOnUse" x="-4" y="20" width="84" height="86"><path fill="white" d="M30 26 H42 A30 30 0 0 1 72 56 V70 A30 30 0 0 1 42 100 H30 A30 30 0 0 1 0 70 V56 A30 30 0 0 1 30 26 Z"/><path fill="black" d="M28 44 H44 A6 6 0 0 1 50 50 V50 A6 6 0 0 1 44 56 H28 A6 6 0 0 1 22 50 V50 A6 6 0 0 1 28 44 Z"/><rect fill="black" x="22" y="72" width="60" height="10"/></mask><rect mask="url(#e20)" fill="currentColor" x="-4" y="20" width="84" height="86"/></g><g transform="translate(360 0)"><path fill="currentColor" d="M8 4 H32 V26 H50 V46 H32 V68 Q32 76 40 76 H52 V100 H38 Q8 100 8 70 V46 H0 V26 H8 Z"/></g></g></symbol>
+  <symbol id="cross" viewBox="0 0 100 100"><g transform="translate(0 0) scale(1)" fill="currentColor"><rect x="43.0" y="6" width="14" height="30" rx="3"/><rect x="43.0" y="64" width="14" height="30" rx="3"/><rect x="6" y="43.0" width="30" height="14" rx="3"/><rect x="64" y="43.0" width="30" height="14" rx="3"/></g></symbol>
+  <symbol id="brk" viewBox="0 0 100 100"><path transform="translate(0 0) scale(1)" d="M12 38 V12 H38 M62 12 H88 V38 M88 62 V88 H62 M38 88 H12 V62" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="miter" stroke-linecap="butt"/></symbol>
+</svg>
+<main>
+  <header class="top">
+    <div>
+      <h1>UI takes</h1>
+      <p class="lead">Target's interface pieces. The brand move is <b>lock-on</b>: focus brackets snap onto whatever you're about to act on. Hover the tiles and cards. Everything is clickable: open and close tabs, press <span class="kbd">Ctrl</span> <span class="kbd">K</span>, flip switches, start a download. Motion stays under 320 ms, uses transform and opacity, and turns off with reduced motion.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Theme" data-seg="theme"><span class="thumb"></span>
+      <button aria-pressed="true" data-v="light">Light</button><button aria-pressed="false" data-v="dark">Dark</button>
+    </div>
+  </header>
+
+  <h2>01 · Window <em style="font-style:normal">Click + to open a tab, × to close, the badge for spaces, the lock for a permission prompt</em></h2>
+  <div class="window reveal">
+    <div class="strip">
+      <div style="position:relative">
+        <button class="chip-menu press" aria-expanded="false" data-pop="spaces"><span class="badge"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span><span id="space-name">Work</span><i class="caret"></i></button>
+        <div class="pop" id="spaces" data-slop-allow="nested-cards">
+          <button data-space="Work"><i class="dot"></i>Work</button>
+          <button data-space="Personal"><i class="dot" style="background:var(--accent)"></i>Personal</button>
+          <button data-space="Trip"><i class="dot" style="background:var(--muted)"></i>Trip</button>
+          <hr style="border:none;border-top:1px solid rgba(0,0,0,0.08);"><button>New space…</button>
+        </div>
+      </div>
+      <div class="tabs" id="tabs">
+        <div class="tab on" data-slop-allow="nested-cards"><i class="fav"></i><span class="ttl">Inbox · 3 new</span><button class="x" aria-label="Close tab"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></button><i class="load"></i></div>
+        <div class="tab" data-slop-allow="nested-cards"><i class="fav y"></i><span class="ttl">Design review notes</span><button class="x" aria-label="Close tab"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></button><i class="load"></i></div>
+        <div class="tab" data-slop-allow="nested-cards"><i class="fav g"></i><span class="ttl">Flights to Lisbon</span><button class="x" aria-label="Close tab"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg></button><i class="load"></i></div>
+      </div>
+      <button class="newtab" id="newtab" aria-label="New tab"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg></button>
+    </div>
+    <div class="toolbar" data-slop-allow="nested-cards">
+      <button class="ib" aria-label="Back"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"></path></svg></button>
+      <button class="ib" aria-label="Forward"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg></button>
+      <button class="ib" id="reload" aria-label="Reload"><svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"></path></svg></button>
+      <div class="addr" id="addr" data-slop-allow="nested-cards"><button id="lock" aria-label="Site permissions" style="display:grid"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></button><span class="url"><b>mail.example.com</b>/inbox</span><button class="btn sm ghost" data-open-cmd style="height:26px;padding:0 8px;color:var(--muted)"><span class="kbd">Ctrl K</span></button></div>
+      <button class="ib on" aria-label="Sidebar"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"></rect><path d="M10 5v14"></path></svg></button>
+      <button class="ib" aria-label="Menu"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
+    </div>
+    <div class="sheet" id="sheet" data-slop-allow="nested-cards">
+      <b>mail.example.com wants to</b>
+      <p>Use your camera · Show notifications</p>
+      <div class="row"><button class="btn primary sm" data-close-sheet>Allow</button><button class="btn secondary sm" data-close-sheet>Block</button><button class="btn ghost sm" data-close-sheet>Only this time</button></div>
+    </div>
+    <div class="page" data-slop-allow="nested-cards"><div class="skel" data-slop-allow="nested-cards"><i></i><i></i><i></i><i></i></div></div>
+  </div>
+
+  <h2>02 · New tab page <em style="font-style:normal">The wordmark rises in when it scrolls into view; tiles lift on hover</em></h2>
+  <div class="stage reveal" style="padding:0;overflow:hidden">
+    <div class="ntp">
+      <div class="hero lock" data-slop-allow="nested-cards"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></div>
+      <div class="grabber"></div>
+      <h3>Where to?</h3>
+      <div class="search" data-slop-allow="nested-cards"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="M20 20l-4.5-4.5"></path></svg>Search or type a site<button class="btn primary sm" data-open-cmd>Go <span class="arr">→</span></button></div>
+      <div class="tiles stagger">
+        <div class="tile lock" data-slop-allow="nested-cards"><i></i>Mail</div><div class="tile lock" data-slop-allow="nested-cards"><i style="background:var(--accent)"></i>Notes</div><div class="tile lock" data-slop-allow="nested-cards"><i></i>Calendar</div><div class="tile lock" data-slop-allow="nested-cards"><i style="background:var(--muted)"></i>News</div><div class="tile lock" data-slop-allow="nested-cards"><i></i>Music</div><div class="tile lock" data-slop-allow="nested-cards"><i></i>Docs</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>03 · Vertical tabs <em style="font-style:normal">The highlight slides between tabs</em></h2>
+  <div class="side reveal">
+    <nav>
+      <button class="chip-menu press" style="align-self:start;padding:5px 10px 5px 5px;border-radius:10px;font-size:13px"><span class="badge"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span>Work<i class="caret"></i></button>
+      <div class="pins" data-slop-allow="nested-cards"><button aria-label="Mail"><i></i></button><button aria-label="Calendar"><i style="background:var(--accent)"></i></button><button aria-label="Music"><i></i></button><button aria-label="Docs"><i style="background:var(--muted)"></i></button></div>
+      <div class="vt" data-seg="vt" data-slop-allow="nested-cards"><span class="thumb"></span>
+        <span class="grp">Today</span>
+        <button aria-pressed="true"><i></i>Inbox · 3 new</button>
+        <button aria-pressed="false"><i style="background:var(--accent)"></i>Design review notes</button>
+        <button aria-pressed="false"><i style="background:var(--muted)"></i>Flights to Lisbon</button>
+        <span class="grp">Later</span>
+        <button aria-pressed="false"><i></i>Long read: the small web</button>
+        <button aria-pressed="false"><i></i>Recipe: shakshuka</button>
+      </div>
+    </nav>
+    <div class="content" data-slop-allow="nested-cards"><div class="skel" data-slop-allow="nested-cards"><i></i><i></i><i></i><i></i></div></div>
+  </div>
+
+  <h2>04 · Buttons <em style="font-style:normal">Press shrinks to 96%; arrows nudge on hover</em></h2>
+  <div class="stage row reveal">
+    <button class="btn primary">Open in Target <span class="arr">→</span></button>
+    <button class="btn secondary">Not now</button>
+    <button class="btn ghost">Learn more</button>
+    <button class="btn accent" data-toast="Downloading Target…">Get Target</button>
+    <button class="btn primary sm">Small</button>
+    <span class="note" style="margin:0">Yellow only on the one call to action that matters.</span>
+  </div>
+
+  <h2>05 · Controls <em style="font-style:normal">Thumbs slide, the switch knob stretches while pressed, checks draw in</em></h2>
+  <div class="stage row reveal" style="gap:28px">
+    <button class="switch" role="switch" aria-checked="true" aria-label="Block trackers"></button>
+    <button class="switch" role="switch" aria-checked="false" aria-label="Sync"></button>
+    <div class="seg" role="group" data-seg="views"><span class="thumb"></span><button aria-pressed="true">Tabs</button><button aria-pressed="false">Spaces</button><button aria-pressed="false">History</button></div>
+    <div class="icons" data-seg="icons"><span class="thumb"></span>
+      <button class="ib" aria-pressed="true" aria-label="Tabs"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="3"></rect><path d="M8 7V5h8v2"></path></svg></button>
+      <button class="ib" aria-pressed="false" aria-label="Grid"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"></rect><rect x="13" y="4" width="7" height="7" rx="2"></rect><rect x="4" y="13" width="7" height="7" rx="2"></rect><rect x="13" y="13" width="7" height="7" rx="2"></rect></svg></button>
+      <button class="ib" aria-pressed="false" aria-label="Reading"><svg class="i" viewBox="0 0 24 24"><path d="M5 6h14M5 11h14M5 16h9"></path></svg></button>
+      <button class="ib" aria-pressed="false" aria-label="Downloads"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg></button>
+    </div>
+    <button class="check" role="checkbox" aria-checked="true"><i><svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7"></path></svg></i>Restore tabs</button>
+    <button class="check" role="checkbox" aria-checked="false"><i><svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7"></path></svg></i>Show bookmarks</button>
+  </div>
+
+  <h2>06 · Badges <em style="font-style:normal">Hover them</em></h2>
+  <div class="stage row reveal" style="gap:20px">
+    <span class="badge lg wiggle"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span>
+    <span class="badge lg accent wiggle"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span>
+    <button class="chip-menu press"><span class="badge"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span>Personal<i class="caret"></i></button>
+    <span class="row" style="gap:8px;font-weight:600"><span class="badge"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span> Pro</span>
+  </div>
+
+  <h2>07 · Menu, toasts, downloads</h2>
+  <div class="grid2">
+    <div class="stage reveal" style="display:grid;place-items:center;gap:20px">
+      <div class="menu">
+        <button data-toast="New tab opened" data-new-tab>New tab <span class="kbd">Ctrl T</span></button>
+        <button data-open-cmd>Find anything <span class="kbd">Ctrl K</span></button>
+        <button data-toast="Moved to Personal">Move tab to space <span class="kbd">⇥</span></button>
+        <hr style="border:none;border-top:1px solid rgba(0,0,0,0.08);">
+        <button data-toast="Tab pinned">Pin tab</button>
+        <button data-toast="12 tabs closed" data-undo class="danger">Close 12 tabs to the right</button>
+      </div>
+      <p class="note">Each item fires a toast. Toasts spring up, stack, and leave on their own.</p>
+    </div>
+    <div class="stage reveal">
+      <div class="dl" id="dl">
+        <div class="dli"><div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg></div><div class="meta"><b>brand-guide.pdf</b><span>Ready to start</span><div class="bar"><i></i></div></div><button class="btn sm secondary" data-dl>Start</button></div>
+        <div class="dli done"><div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"></path></svg></div><div class="meta"><b>photos-lisbon.zip</b><span>84 MB · Done</span><div class="bar"><i style="--p:1"></i></div></div><button class="btn sm ghost">Show</button></div>
+      </div>
+      <p class="note">Progress fills with transform, not width. Done turns the icon into a check.</p>
+    </div>
+  </div>
+
+  <h2>08 · Can't reach a site <em style="font-style:normal">The point drifts off target</em></h2>
+  <div class="stage reveal">
+    <div class="err">
+      <svg class="wall" viewBox="0 0 100 100" aria-hidden="true">
+        <rect width="100" height="100" rx="22" fill="var(--ink)"></rect>
+        <g transform="translate(18 18) scale(.64)" style="color:var(--on-ink)"><use href="#cross"></use></g>
+        <rect class="miss" x="45" y="45" width="10" height="10" fill="var(--accent)"></rect>
+      </svg>
+      <div>
+        <h3>Can't reach this one.</h3>
+        <p>mail.example.com isn't answering. Check your connection, or try again in a moment.</p>
+        <div class="row"><button class="btn primary" id="retry">Try again</button><button class="btn secondary">Go back</button></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>09 · Tab overview <em style="font-style:normal">Cards stagger in</em></h2>
+  <div class="stage reveal">
+    <div class="overview stagger" id="ov">
+      <div class="card lock on"><div class="thumbn"></div><div class="lbl"><i></i>Inbox</div></div>
+      <div class="card lock"><div class="thumbn"></div><div class="lbl"><i style="background:var(--accent)"></i>Design review</div></div>
+      <div class="card lock"><div class="thumbn"></div><div class="lbl"><i style="background:var(--muted)"></i>Flights</div></div>
+      <div class="card lock"><div class="thumbn"></div><div class="lbl"><i></i>Docs</div></div>
+      <div class="card lock"><div class="thumbn"></div><div class="lbl"><i></i>Music</div></div>
+    </div>
+  </div>
+
+  <h2>10 · Settings</h2>
+  <div class="stage reveal">
+    <div class="set"><div><b>Block trackers</b><span>Stops sites following you around the web.</span></div><button class="switch" role="switch" aria-checked="true" aria-label="Block trackers"></button></div>
+    <div class="set"><div><b>AI features</b><span>Off by default. Nothing is sent anywhere unless you turn this on.</span></div><button class="switch" role="switch" aria-checked="false" aria-label="AI features"></button></div>
+    <div class="set"><div><b>Tab position</b><span>Where your tabs live.</span></div><div class="seg" data-seg="pos"><span class="thumb"></span><button aria-pressed="true">Top</button><button aria-pressed="false">Side</button></div></div>
+  </div>
+
+  <h2>11 · Motion tokens <em style="font-style:normal">Click a square to feel each one</em></h2>
+  <div class="stage reveal">
+    <table class="spec">
+      <thead><tr><th>Token</th><th>Value</th><th>Used for</th><th>Feel</th></tr></thead>
+      <tbody>
+        <tr><td><code>--press</code></td><td>110 ms, ease-out</td><td>Button and tile press</td><td><div class="demo" data-demo="press"></div></td></tr>
+        <tr><td><code>--fast</code></td><td>150 ms, ease-out</td><td>Hovers, menus, colors, highlight slide</td><td><div class="demo" data-demo="fast"></div></td></tr>
+        <tr><td><code>--base</code></td><td>220 ms, ease-out</td><td>Thumbs, tab open/close, switch</td><td><div class="demo" data-demo="base"></div></td></tr>
+        <tr><td><code>--slow</code></td><td>320 ms, spring</td><td>Toasts, sheets, command bar</td><td><div class="demo" data-demo="slow"></div></td></tr>
+        <tr><td><code>--spring</code></td><td>cubic-bezier(.3, 1.35, .5, 1)</td><td>Things that arrive: a small overshoot</td><td></td></tr>
+        <tr><td><code>--in</code></td><td>cubic-bezier(.5, 0, .75, 0)</td><td>Things that leave: quick exit</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div class="scrim" id="scrim">
+  <div class="cmd" role="dialog" aria-label="Find anything">
+    <div class="in"><span class="badge"><svg viewBox="-2 0 416 134"><use href="#wm"></use></svg></span><input id="q" placeholder="Search tabs, history, or the web" autocomplete="off"></div>
+    <div class="res" id="res"><span class="hl lock on" id="hl"></span></div>
+    <div class="foot"><span><span class="kbd">↑</span> <span class="kbd">↓</span> move</span><span><span class="kbd">⇥</span> switch to tab</span><span><span class="kbd">Esc</span> close</span></div>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // sliding thumbs for segmented groups
+  const moveThumb = g => { const on = g.querySelector('[aria-pressed="true"]'), th = g.querySelector(":scope > .thumb"); if (!on || !th) return;
+    if (g.classList.contains("vt")) { th.style.transform = `translateY(${on.offsetTop}px)`; } else { th.style.width = on.offsetWidth + "px"; th.style.transform = `translateX(${on.offsetLeft - (g.classList.contains("icons") ? 0 : 0)}px)`; } };
+  $$("[data-seg]").forEach(g => {
+    $$(":scope > button", g).forEach(b => b.addEventListener("click", () => {
+      $$(":scope > button", g).forEach(o => o.setAttribute("aria-pressed", o === b)); moveThumb(g);
+      if (g.dataset.seg === "theme") setTheme(b.dataset.v);
+    }));
+  });
+  const allThumbs = () => $$("[data-seg]").forEach(moveThumb);
+  requestAnimationFrame(allThumbs); addEventListener("resize", allThumbs); document.fonts && document.fonts.ready.then(allThumbs);
+
+  // theme
+  function setTheme(t) { document.documentElement.dataset.theme = t; try { localStorage.setItem("tab-ui-theme", t); } catch (e) {} }
+  try { const t = localStorage.getItem("tab-ui-theme"); if (t) { setTheme(t); $$('[data-seg="theme"] button').forEach(b => b.setAttribute("aria-pressed", b.dataset.v === t)); } } catch (e) {}
+
+  // reveal on scroll
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });
+  $$(".reveal").forEach(el => io.observe(el));
+
+  // tabs: open, close, select
+  const tabs = $("#tabs");
+  const names = [["Weather", "g"], ["Shopping list", ""], ["Playlist: focus", "y"], ["Recipe: shakshuka", ""], ["Bank", "g"]];
+  let ni = 0;
+  const select = t => { $$(".tab", tabs).forEach(o => o.classList.toggle("on", o === t)); };
+  const wireTab = t => {
+    t.addEventListener("click", e => { if (!e.target.closest(".x")) select(t); });
+    $(".x", t).addEventListener("click", () => closeTab(t));
+  };
+  $$(".tab", tabs).forEach(wireTab);
+  function openTab() {
+    const [n, c] = names[ni++ % names.length];
+    const t = document.createElement("div");
+    t.className = "tab entering loading";
+    t.innerHTML = `<i class="fav ${c}"></i><span class="ttl">${n}</span><button class="x" aria-label="Close tab"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><i class="load"></i>`;
+    tabs.appendChild(t); wireTab(t); select(t);
+    requestAnimationFrame(() => requestAnimationFrame(() => t.classList.remove("entering")));
+    setTimeout(() => t.classList.remove("loading"), 950);
+  }
+  function closeTab(t) {
+    const wasOn = t.classList.contains("on");
+    const next = t.nextElementSibling || t.previousElementSibling;
+    t.classList.remove("on"); t.classList.add("leaving");
+    const done = () => { t.remove(); };
+    reduce ? done() : t.addEventListener("transitionend", e => { if (e.propertyName === "flex-basis") done(); }, { once: true });
+    setTimeout(done, 400);
+    if (wasOn && next) select(next);
+    toast("Tab closed", true, () => { tabs.appendChild(t); t.classList.remove("leaving"); select(t); });
+  }
+  $("#newtab").addEventListener("click", openTab);
+
+  // reload spin
+  $("#reload").addEventListener("click", e => { const b = e.currentTarget; b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin"); const on = $(".tab.on"); if (on) { on.classList.remove("loading"); void on.offsetWidth; on.classList.add("loading"); setTimeout(() => on.classList.remove("loading"), 950); } });
+
+  // popover (spaces)
+  $$("[data-pop]").forEach(b => { const p = document.getElementById(b.dataset.pop);
+    b.addEventListener("click", e => { e.stopPropagation(); const open = !p.classList.contains("open"); p.classList.toggle("open", open); b.setAttribute("aria-expanded", open); });
+    $$("[data-space]", p).forEach(o => o.addEventListener("click", () => { $("#space-name").textContent = o.dataset.space; p.classList.remove("open"); b.setAttribute("aria-expanded", false); toast(`Switched to ${o.dataset.space}`); }));
+  });
+  document.addEventListener("click", () => $$(".pop.open").forEach(p => { p.classList.remove("open"); $$(`[data-pop="${p.id}"]`).forEach(b => b.setAttribute("aria-expanded", false)); }));
+
+  // permission sheet
+  $("#lock").addEventListener("click", e => { e.stopPropagation(); $("#sheet").classList.toggle("open"); });
+  $$("[data-close-sheet]").forEach(b => b.addEventListener("click", () => { $("#sheet").classList.remove("open"); toast(b.textContent === "Block" ? "Blocked for this site" : "Allowed"); }));
+
+  // switches + checks
+  $$(".switch, .check").forEach(s => s.addEventListener("click", () => s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true")));
+
+  // toasts
+  function toast(msg, undo = false, onUndo) {
+    const el = document.createElement("div"); el.className = "toast"; el.innerHTML = `<span>${msg}</span>${undo ? '<button class="btn">Undo</button>' : ""}`;
+    const box = $("#toasts"); box.appendChild(el); while (box.children.length > 3) box.firstElementChild.remove();
+    const leave = () => { el.classList.add("out"); setTimeout(() => el.remove(), 180); };
+    const timer = setTimeout(leave, 3200);
+    if (undo) $(".btn", el).addEventListener("click", () => { clearTimeout(timer); onUndo && onUndo(); leave(); });
+  }
+  $$("[data-toast]").forEach(b => b.addEventListener("click", () => { if (b.hasAttribute("data-new-tab")) openTab(); toast(b.dataset.toast, b.hasAttribute("data-undo")); }));
+
+  // command palette
+  const items = [["Flights to Lisbon", "Open tab ⇥"], ["Inbox · 3 new", "Open tab ⇥"], ['Search the web', "↵"], ["flightradar · visited yesterday", "History"], ["Design review notes", "Open tab ⇥"], ["Settings: Block trackers", "Setting"]];
+  let sel = 0, shown = items;
+  const renderRes = () => { const q = $("#q").value.toLowerCase(); shown = items.filter(([n]) => !q || n.toLowerCase().includes(q)).slice(0, 5); if (!shown.length) shown = [[`Search "${$("#q").value}"`, "↵"]]; sel = Math.min(sel, shown.length - 1);
+    $("#res").innerHTML = '<span class="hl lock on" id="hl"></span>' + shown.map(([n, k]) => `<div><i class="fv"></i>${n}<small>${k}</small></div>`).join(""); moveHl(); };
+  const moveHl = () => { const hl = $("#hl"); if (hl) hl.style.transform = `translateY(${sel * 40}px)`; };
+  const openCmd = () => { $("#scrim").classList.add("open"); $("#q").value = ""; sel = 0; renderRes(); setTimeout(() => $("#q").focus(), 30); };
+  const closeCmd = () => $("#scrim").classList.remove("open");
+  $$("[data-open-cmd]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); openCmd(); }));
+  $("#scrim").addEventListener("click", e => { if (e.target.id === "scrim") closeCmd(); });
+  $("#q").addEventListener("input", () => { sel = 0; renderRes(); });
+  addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); $("#scrim").classList.contains("open") ? closeCmd() : openCmd(); }
+    if (!$("#scrim").classList.contains("open")) return;
+    if (e.key === "Escape") closeCmd();
+    if (e.key === "ArrowDown") { e.preventDefault(); sel = (sel + 1) % shown.length; moveHl(); }
+    if (e.key === "ArrowUp") { e.preventDefault(); sel = (sel - 1 + shown.length) % shown.length; moveHl(); }
+    if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); closeCmd(); toast(`${e.key === "Tab" ? "Switched to" : "Opening"} ${shown[sel][0]}`); }
+  });
+
+  // downloads
+  $$("[data-dl]").forEach(b => b.addEventListener("click", () => {
+    const row = b.closest(".dli"), bar = $(".bar i", row), info = $(".meta span", row); b.disabled = true; b.textContent = "Pause";
+    row.classList.remove("done"); $(".ic", row).innerHTML = '<svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+    let p = 0; const tick = setInterval(() => { p = Math.min(1, p + .07 + Math.random() * .08); bar.style.setProperty("--p", p); info.textContent = `${Math.round(p * 12.4 * 10) / 10} of 12.4 MB`;
+      if (p >= 1) { clearInterval(tick); row.classList.add("done"); info.textContent = "12.4 MB · Done"; $(".ic", row).innerHTML = '<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>'; b.disabled = false; b.textContent = "Again"; toast("brand-guide.pdf downloaded"); } }, 300);
+  }));
+
+  // error retry
+  $("#retry").addEventListener("click", () => toast("Still can't reach it. Trying again in 5 s"));
+
+  // overview cards select
+  $$("#ov .card").forEach(c => c.addEventListener("click", () => $$("#ov .card").forEach(o => o.classList.toggle("on", o === c))));
+
+  // motion token demos
+  const dur = { press: [110, "cubic-bezier(.2,.8,.2,1)"], fast: [150, "cubic-bezier(.2,.8,.2,1)"], base: [220, "cubic-bezier(.2,.8,.2,1)"], slow: [320, "cubic-bezier(.3,1.35,.5,1)"] };
+  $$("[data-demo]").forEach(d => d.addEventListener("click", () => { const [ms, ease] = dur[d.dataset.demo];
+    d.animate([{ transform: "translateX(0)" }, { transform: "translateX(140px)" }], { duration: ms, easing: ease, fill: "forwards" }).finished.then(() =>
+    d.animate([{ transform: "translateX(140px)" }, { transform: "translateX(0)" }], { duration: ms, easing: ease, fill: "forwards", delay: 300 })); }));
+</script>
+</body>
+</html>

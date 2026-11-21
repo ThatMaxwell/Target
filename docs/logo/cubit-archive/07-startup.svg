@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- Startup animation concept (loops for preview).
+       1. The three faces slide in from their own directions, staggered.
+       2. The cube sits whole for a beat.
+       3. The bit lifts straight up out of the corner and settles: cube -> Cubit. -->
+  <style>
+    .p { animation-duration: 3.6s; animation-iteration-count: infinite; animation-fill-mode: both; }
+    .top   { animation-name: top; }
+    .left  { animation-name: left; }
+    .right { animation-name: right; }
+    .bit   { animation-name: bit; }
+    @keyframes top   { 0% { transform: translate(0,-14px); opacity: 0; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+                       11% { transform: none; opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes left  { 0%, 4% { transform: translate(-12px,7px); opacity: 0; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+                       15% { transform: none; opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes right { 0%, 8% { transform: translate(12px,7px); opacity: 0; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+                       19% { transform: none; opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes bit   { 0% { transform: translate(0,-14px); opacity: 0; animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+                       11% { transform: none; opacity: 1; }
+                       36% { transform: none; animation-timing-function: cubic-bezier(.3,1.4,.5,1); }
+                       48% { transform: translate(0,-13px); }
+                       90% { transform: translate(0,-13px); opacity: 1; } 100% { transform: translate(0,-13px); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .p { animation: none; } }
+  </style>
+  <g class="p top">
+    <polygon points="50,10 84.64,30 67.32,40 50,30 32.68,40 15.36,30" fill="#3a3a3a"/>
+    <polygon points="50,50 67.32,60 50,70 32.68,60" fill="#3a3a3a"/>
+  </g>
+  <g class="p left">
+    <polygon points="15.36,30 32.68,40 32.68,60 50,70 50,90 15.36,70" fill="#1a1a1a"/>
+    <polygon points="50,30 67.32,40 67.32,60 50,50" fill="#1a1a1a"/>
+  </g>
+  <g class="p right">
+    <polygon points="84.64,30 67.32,40 67.32,60 50,70 50,90 84.64,70" fill="#000"/>
+    <polygon points="50,30 32.68,40 32.68,60 50,50" fill="#000"/>
+  </g>
+  <!-- the bit: fills the notch at first, so the cube looks whole -->
+  <g class="p bit">
+    <polygon points="50,30 67.32,40 50,50 32.68,40" fill="#3a3a3a"/>
+    <polygon points="32.68,40 50,50 50,70 32.68,60" fill="#1a1a1a"/>
+    <polygon points="50,50 67.32,40 67.32,60 50,70" fill="#000"/>
+  </g>
+</svg>

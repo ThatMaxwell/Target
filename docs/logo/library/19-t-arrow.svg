@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- The crossbar becomes an arrow: the letter t and the Tab key at once. -->
+  <g transform="translate(10 0)"><path d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#111"/><rect x="40" y="26" width="22" height="18" fill="#111"/><polygon points="58,12 82,35 58,58" fill="#111"/></g>
+</svg>

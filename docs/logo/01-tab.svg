@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- A browser tab (rounded top, flat bottom) with a heavy hand-drawn "t" pushed to the left. -->
+  <path d="M8 84 V40 A18 18 0 0 1 26 22 H74 A18 18 0 0 1 92 40 V84 Z" fill="#111"/>
+  <path transform="translate(22 30) scale(.5)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#fff"/>
+</svg>

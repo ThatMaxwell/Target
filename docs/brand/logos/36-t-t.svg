@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 110" width="260" height="220">
+  <!-- target starts and ends on a t. The two t's face each other like brackets. -->
+  <path transform="translate(8 2)" fill="#111" d="M8 4 H32 V26 H50 V46 H32 V68 Q32 76 40 76 H52 V100 H38 Q8 100 8 70 V46 H0 V26 H8 Z"/><path transform="translate(122 2) scale(-1 1)" fill="#111" d="M8 4 H32 V26 H50 V46 H32 V68 Q32 76 40 76 H52 V100 H38 Q8 100 8 70 V46 H0 V26 H8 Z"/>
+</svg>

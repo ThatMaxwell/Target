@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
+  <!-- The cube and its bit: a big cube with a small one beside it. -->
+  <g transform="translate(4 14) scale(.78)">
+    <polygon points="50,10 84.64,30 50,50 15.36,30" fill="#3a3a3a"/>
+    <polygon points="15.36,30 50,50 50,90 15.36,70" fill="#1a1a1a"/>
+    <polygon points="50,50 84.64,30 84.64,70 50,90" fill="#000"/>
+  </g>
+  <g transform="translate(68 6) scale(.26)">
+    <polygon points="50,10 84.64,30 50,50 15.36,30" fill="#3a3a3a"/>
+    <polygon points="15.36,30 50,50 50,90 15.36,70" fill="#1a1a1a"/>
+    <polygon points="50,50 84.64,30 84.64,70 50,90" fill="#000"/>
+  </g>
+</svg>

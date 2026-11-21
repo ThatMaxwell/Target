@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 100" width="260" height="200">
+  <!-- An arrow that hits a t instead of a wall. -->
+  <g stroke="#111" stroke-width="13" fill="none" stroke-linejoin="miter"><path d="M6 56 H56"/><path d="M40 37 L60 56 L40 75"/></g><path transform="translate(72 4) scale(0.92)" d="M10 6 H30 V26 H46 V44 H30 V72 Q30 82 42 82 H50 V100 H40 Q10 100 10 72 V44 H0 V26 H10 Z" fill="#111" />
+</svg>
